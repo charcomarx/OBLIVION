@@ -51,8 +51,9 @@
       font-size: 24px;
       color: white;
       white-space: pre-wrap;
-      padding: 0 20px;
       text-align: left;
+      display: inline-block;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -72,15 +73,25 @@
   <div id="tally" class="tally"></div>
 
   <script>
+    // Get references to form, tally, and input field
     const form = document.getElementById('strikeForm');
     const tally = document.getElementById('tally');
     const input = document.getElementById('user-input');
 
+    // Retrieve the tally from localStorage, if available
+    let storedTally = localStorage.getItem('tally');
+    if (storedTally) {
+      tally.innerHTML = storedTally; // Restore tally on page load
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();  // Prevent the default form submission
 
-      // Append a new tally [ ] after each submission
-      tally.innerHTML += '[ ]\n';  // Adding a newline after each entry
+      // Append a new tally [ ] after each submission, on a new line
+      tally.innerHTML += '[ ]<br>';
+
+      // Store the updated tally in localStorage
+      localStorage.setItem('tally', tally.innerHTML);
 
       // Clear the input field after submission
       input.value = '';
