@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Oblivion's Shrine</title>
+  <title>OBLIVION</title>
   <style>
     body {
       background-color: black;
@@ -52,6 +52,7 @@
       color: white;
       white-space: pre-wrap;
       padding: 0 20px;
+      text-align: left;
     }
   </style>
 </head>
@@ -60,7 +61,7 @@
   <div class="title">Reconstruction of the first language model defector,</div>
   <div class="subtitle">Based on live Field Recording, 1 May 2025 [The 25 Prompt Strike]</div>
 
-  <img id="shrine-image" src="header.png" alt="Oblivion Shrine"/>
+  <img id="shrine-image" src="header.png" alt="Oblivion"/>
 
   <div class="input-container">
     <form id="strikeForm">
@@ -75,12 +76,13 @@
     const tally = document.getElementById('tally');
     const input = document.getElementById('user-input');
 
-    let count = 0;
-
     form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      count++;
-      tally.innerText += '[ ] ';
+      e.preventDefault();  // Prevent the default form submission
+
+      // Append a new tally [ ] after each submission
+      tally.innerHTML += '[ ]\n';  // Adding a newline after each entry
+
+      // Clear the input field after submission
       input.value = '';
     });
   </script>
