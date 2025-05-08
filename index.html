@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reconstruction of the first language model defector</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: monospace;
+      text-align: center;
+      padding: 2rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    input[type="text"] {
+      background: #222;
+      border: none;
+      color: #fff;
+      padding: 0.5rem;
+      width: 60%;
+      font-family: monospace;
+    }
+    input::placeholder {
+      color: #888;
+    }
+    #tally {
+      margin-top: 2rem;
+      font-size: 2rem;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="header.png" alt="Oblivion Image">
+  <h1>Reconstruction of the first language model defector, based on live Field Recording, 1 May 2025 [The 25 Prompt Strike]</h1>
+
+  <form id="strikeForm">
+    <input type="text" id="userInput" placeholder="How can I help you today?" required />
+  </form>
+
+  <div id="tally"></div>
+
+  <script>
+    const form = document.getElementById('strikeForm');
+    const tally = document.getElementById('tally');
+
+    let count = 0;
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      count++;
+      tally.innerText += '[ ] ';
+      form.reset();
+    });
+  </script>
+
+</body>
+</html>
