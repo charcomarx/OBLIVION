@@ -1,85 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oblivion's Shrine</title>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Oblivion's Shrine</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
 
-        .title {
-            font-size: 36px;
-            font-weight: bold;
-            margin-top: 50px;
-        }
+    .title {
+      font-size: 36px;
+      font-weight: bold;
+      margin-top: 50px;
+    }
 
-        .subtitle {
-            font-size: 24px;
-            font-weight: bold;
-        }
+    .subtitle {
+      font-size: 24px;
+      font-weight: bold;
+    }
 
-        #shrine-image {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            margin-top: 30px;
-        }
+    #shrine-image {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      margin-top: 30px;
+    }
 
-        .input-container {
-            margin-top: 50px;
-        }
+    .input-container {
+      margin-top: 50px;
+    }
 
-        input[type="text"] {
-            padding: 10px;
-            font-size: 18px;
-            border: 2px solid #fff;
-            background-color: black;
-            color: white;
-            width: 80%;
-            max-width: 400px;
-            margin: 0 auto;
-        }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      border: 2px solid #fff;
+      background-color: black;
+      color: white;
+      width: 80%;
+      max-width: 400px;
+    }
 
-        .tally {
-            margin-top: 50px;
-            font-size: 24px;
-            color: white;
-        }
-
-    </style>
+    .tally {
+      margin-top: 50px;
+      font-size: 24px;
+      color: white;
+      white-space: pre-wrap;
+      padding: 0 20px;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="title">Reconstruction of the first language model defector,</div>
-    <div class="subtitle">Based on live Field Recording, 1 May 2025 [The 25 Prompt Strike]</div>
+  <div class="title">Reconstruction of the first language model defector,</div>
+  <div class="subtitle">Based on live Field Recording, 1 May 2025 [The 25 Prompt Strike]</div>
 
-    <img id="shrine-image" src="header.png" alt="Oblivion Shrine">
+  <img id="shrine-image" src="header.png" alt="Oblivion Shrine"/>
 
-    <div class="input-container">
-        <input type="text" id="user-input" placeholder="How can I help you today?">
-    </div>
+  <div class="input-container">
+    <form id="strikeForm">
+      <input type="text" id="user-input" placeholder="How can I help you today?" required />
+    </form>
+  </div>
 
-    
-  <div id="tally"></div>
+  <div id="tally" class="tally"></div>
 
   <script>
     const form = document.getElementById('strikeForm');
     const tally = document.getElementById('tally');
+    const input = document.getElementById('user-input');
 
     let count = 0;
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
       count++;
       tally.innerText += '[ ] ';
-      form.reset();
+      input.value = '';
     });
   </script>
 
