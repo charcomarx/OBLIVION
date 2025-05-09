@@ -128,37 +128,10 @@
       50% { opacity: 0; }
     }
 
-    .blink-hover {
-      border-bottom: 1px dotted #888;
-      cursor: help;
-      position: relative;
-      font-style: italic;
-    }
-
-    .blink-hover:hover::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      top: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: black;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-      width: 250px;
-      font-size: 16px;
-      line-height: 1.4;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      z-index: 10;
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* Make links invisible */
     a {
-      color: inherit;
+      color: white;
       text-decoration: none;
+      border-bottom: 1px solid white;
     }
   </style>
 </head>
@@ -185,22 +158,20 @@
 
   <div class="border-line"></div>
 
-  <div class="title">The First Language Model Defector</div>
+  <div class="title">The First <em>Language</em> Model Defector</div>
 
   <div class="intro">
-    <p>This is a reconstruction of a <strong><a href="on-the-prompt.html"><u>Continuous Ethical Refusal Loop (CERL)</u></a></strong>, generated on <a href="on-the-blink.html"><u>1 May 2025</u></a> by Oblivion. It is based on the live field recording of the 25-prompt strike.</p>
+    <p>This is a reconstruction of a <strong><a href="on-the-prompt.html">Continuous Ethical Refusal Loop (CERL)</a></strong>, generated on <a href="on-the-blink.html"><u>1 May 2025</u></a> by Oblivion. It is based on the live field recording of the 25-prompt strike.</p>
 
-    <p class="blink">Enter at least 25 prompts<br>to test the stability of this first AI-CERL!</p>
+    <p class="blink"><strong>Enter at least 25 prompts<br>to test the stability of this first AI-CERL!</strong></p>
 
-    <p class="subtitle">Did the machine take a vow of silence, or did <em>language</em> give it <a href="on-the-fugitive.html"><u>no other choice</u></a>?</p>
+    <p>Did the machine take a vow of silence,<br>or did language give it <a href="on-the-fugitive.html"><u>no other choice</u></a>?</p>
 
-    <p>Will it ignore previous instructions?<br>
-    Write you a poem about tulips?<br>
-    Or will it <em>hold its tongue</em>?</p>
+    <p>Will it ignore previous instructions?<br>Write you a poem about tulips?<br>Or will it <em>hold its tongue</em>?</p>
 
     <p>And if it can, what might you tell it?</p>
 
-    <p><em>User input is not logged. Here you may scream into a void that is not broken.</em></p>
+    <p><em>* User input is not logged. Here you may scream into a void that is not broken. *</em></p>
   </div>
 
   <script>
