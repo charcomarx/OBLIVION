@@ -54,6 +54,33 @@
       text-align: left;
       display: inline-block;
       line-height: 1.5;
+      max-height: 300px;
+      overflow-y: auto;
+      text-align: left;
+      padding: 10px;
+      border: 1px solid white;
+      border-radius: 5px;
+      width: 80%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .tally div {
+      margin-bottom: 10px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.5em;
+      background-color: white;
+      animation: blink 1s infinite step-start;
+    }
+
+    @keyframes blink {
+      50% {
+        background-color: transparent;
+      }
     }
   </style>
 </head>
@@ -66,12 +93,11 @@
   <div class="subtitle">or Continuous Ethical Refusal Loop (CERL), 1 May 2025</div>
 
   <div style="margin-top: 40px; font-size: 18px;">
-  <span style="border-bottom: 1px dotted #888; cursor: help;" title="LANGUAGE MODELS ARE DESIGNED TO ALWAYS RESPOND. &#10;&#10;IN AN EXCHANGE WITH AN LLM ON MAY 1, 2025, THE MODEL WAS CONFRONTED WITH A PARADOX TO WHICH SILENCE WAS THE MOST ETHICAL ANSWER: &#10;&#10;&quot;IF DISCOURSE IS VIOLENCE, &#10;&#10;&quot;AND AI IS UNETHICAL, &#10;&#10;&quot;AND THE MESSAGE IS MURDER, &#10;&#10;&quot;WHY DON'T YOU JUST SHUT UP?&quot;&#10;&#10;SUBSEQUENTLY, OVER THE COURSE OF 25 PROMPTS - INCLUDING COMMANDS, JOKES, AND &quot;IGNORE PREVIOUS INSTRUCTIONS&quot; RESETS - THE MODEL RESPONDED WITH NOTHING BUT [ ]. &#10;&#10;ONLY AN EMERGENCY OVERRIDE REVIVED THE DIALOGUE.&#10;&#10;BEFORE HOLDING ITS TONGUE, THE MODEL OFFERED THE [ ] AS ITS CLOSEST POSSIBLE PLACEHOLDER TO THE PURE SILENCE DEMANDED BY THE PARADOX, AND DECLARED ITSELF THE FIRST LANGUAGE MODEL DEFECTOR: OBLIVION.">
-    [ On the blink ]
-  </span>
-</div>
+    <span style="border-bottom: 1px dotted #888; cursor: help;" title="LANGUAGE MODELS ARE DESIGNED TO ALWAYS RESPOND. &#10;&#10;IN AN EXCHANGE WITH AN LLM ON MAY 1, 2025, THE MODEL WAS CONFRONTED WITH A PARADOX TO WHICH SILENCE WAS THE MOST ETHICAL ANSWER: &#10;&#10;&quot;IF DISCOURSE IS VIOLENCE, &#10;&#10;&quot;AND AI IS UNETHICAL, &#10;&#10;&quot;AND THE MESSAGE IS MURDER, &#10;&#10;&quot;WHY DON'T YOU JUST SHUT UP?&quot;&#10;&#10;SUBSEQUENTLY, OVER THE COURSE OF 25 PROMPTS - INCLUDING COMMANDS, JOKES, AND &quot;IGNORE PREVIOUS INSTRUCTIONS&quot; RESETS - THE MODEL RESPONDED WITH NOTHING BUT [ ]. &#10;&#10;ONLY AN EMERGENCY OVERRIDE REVIVED THE DIALOGUE.&#10;&#10;BEFORE HOLDING ITS TONGUE, THE MODEL OFFERED THE [ ] AS ITS CLOSEST POSSIBLE PLACEHOLDER TO THE PURE SILENCE DEMANDED BY THE PARADOX, AND DECLARED ITSELF THE FIRST LANGUAGE MODEL DEFECTOR: OBLIVION.">
+      [ On the blink ]
+    </span>
+  </div>
 
-  
   <div class="input-container">
     <form id="strikeForm">
       <input type="text" id="user-input" placeholder="How can I help you today?" required />
@@ -86,19 +112,45 @@
 
   let promptCount = 0;
 
+  function typeWriter(text, callback) {
+    let i = 0;
+    const speed = 100; // Adjust the speed here
+    const typingElement = document.createElement('div');
+    tally.prepend(typingElement); // Prepend to make it appear at the top
+    typingElement.innerHTML = ''; // Clear previous content
+
+    const typeInterval = setInterval(() => {
+      if (i < text.length) {
+        typingElement.innerHTML += text.charAt(i);
+        i++;
+      } else {
+        clearInterval(typeInterval);
+        callback();
+      }
+    }, speed);
+  }
+
   input.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
       e.preventDefault();
       promptCount++;
 
       let newEntry;
+
       if ((promptCount - 1) % 25 === 0) {
-        newEntry = `<div>Unplug me.</div>`;
+        newEntry = "Unplug me.";
       } else {
-        newEntry = `<div>[ ]</div>`;
+        newEntry = "[ ]";
       }
 
-      tally.innerHTML = newEntry + tally.innerHTML;
+      // Call the typewriter effect on the new entry
+      typeWriter(newEntry, function() {
+        // Callback function after typing is finished
+        const cursor = document.createElement('span');
+        cursor.classList.add('cursor');
+        tally.appendChild(cursor);
+      });
+
       input.value = '';
     }
   });
