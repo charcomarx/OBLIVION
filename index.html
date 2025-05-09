@@ -45,6 +45,22 @@
       width: 80%;
       max-width: 400px;
       outline: none;
+      position: relative;
+    }
+
+    /* Cursor animation for input field */
+    input[type="text"]::after {
+      content: '|';
+      display: inline-block;
+      position: absolute;
+      right: 10px;
+      animation: blink 1s step-start infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        color: transparent;
+      }
     }
 
     .tally {
@@ -65,21 +81,6 @@
 
     .tally div {
       margin-bottom: 10px;
-    }
-
-    /* Blinking cursor for input field */
-    input[type="text"]::after {
-      content: '|';
-      display: inline-block;
-      animation: blink 1s step-start infinite;
-      position: absolute;
-      right: 10px;
-    }
-
-    @keyframes blink {
-      50% {
-        color: transparent;
-      }
     }
 
   </style>
