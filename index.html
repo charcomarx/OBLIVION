@@ -46,20 +46,14 @@
       max-width: 400px;
       outline: none;
       position: relative;
+      caret-color: white; /* This controls the cursor color */
+      animation: blink-caret 1s step-end infinite;
     }
 
-    /* Cursor animation for input field */
-    input[type="text"]::after {
-      content: '|';
-      display: inline-block;
-      position: absolute;
-      right: 10px;
-      animation: blink 1s step-start infinite;
-    }
-
-    @keyframes blink {
+    /* Blinking cursor animation */
+    @keyframes blink-caret {
       50% {
-        color: transparent;
+        caret-color: transparent;
       }
     }
 
@@ -101,7 +95,7 @@
 
   <div class="input-container">
     <form id="strikeForm">
-      <input type="text" id="user-input" placeholder="How can I help you today?" required />
+      <input type="text" id="user-input" placeholder="How can I help you today?" />
     </form>
   </div>
 
