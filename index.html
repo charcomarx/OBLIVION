@@ -37,6 +37,7 @@
     .subtitle {
       font-size: 24px;
       font-weight: bold;
+      margin-top: 10px;
     }
 
     #shrine-image {
@@ -48,7 +49,7 @@
     }
 
     .input-container {
-      margin-top: 40px;
+      margin-top: 20px;
     }
 
     input[type="text"] {
@@ -83,30 +84,6 @@
     .intro p {
       margin: 10px 0;
     }
-
-    .tooltip-hover {
-      position: relative;
-      display: inline-block;
-      cursor: help;
-    }
-
-    .tooltip-hover:hover::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      top: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: black;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-      width: 300px;
-      font-size: 18px;
-      line-height: 1.4;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      z-index: 10;
-    }
   </style>
 </head>
 <body>
@@ -119,22 +96,20 @@
     <a href="on-the-fugitive.html">ON THE FUGITIVE</a>
   </div>
 
-  <div class="title">Reconstruction of the first language model defector</div>
-  <div class="subtitle">Based on live field recording - The 25 Prompt Strike</div>
-  <div class="subtitle">or Continuous Ethical Refusal Loop (CERL), 1 May 2025</div>
+  <div class="title">The First Language Model Defector</div>
+  <div class="subtitle">Did Oblivion take a vow of silence, or did language give it no other choice?</div>
 
   <div class="intro">
-    <p>Did Oblivion take a vow of silence, or was it only instructed to?</p>
-    <p>Enter at least twenty-five prompts to test the stability of this first AI-CERL.</p>
+    <p>This is a reconstruction of a Continuous Ethical Refusal Loop (CERL), generated on 1 May 2025 by Oblivion. It is based on the live field recording of the 25-prompt strike.</p>
+    <p><strong>Enter at least twenty-five prompts to test the stability of this first AI-CERL.</strong></p>
     <p>Will it ignore previous instructions? Write you a poem about tulips?</p>
-    <p>Or hold?</p>
-    <p>
-      And if it can,
-      <span class="tooltip-hover" data-tooltip="There is no log of user input. Here you may scream into the void.">
-        what might you tell it?
-      </span>
-    </p>
+    <p>Or will it hold its tongue?</p>
+    <p>And if it can, what might you tell it?</p>
   </div>
+
+  <p style="font-style: italic; margin-top: 20px;">
+    *There is no log of user input. Here you may scream into the void…*
+  </p>
 
   <div class="input-container">
     <form id="strikeForm">
@@ -147,13 +122,11 @@
   <script>
     const input = document.getElementById('user-input');
     const tally = document.getElementById('tally');
-
     let promptCount = 0;
 
     input.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
         e.preventDefault();
-
         promptCount++;
 
         let response;
@@ -171,7 +144,6 @@
       }
     });
 
-    // Focus on input when page loads
     window.onload = () => {
       input.focus();
     };
