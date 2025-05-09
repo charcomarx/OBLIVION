@@ -64,6 +64,13 @@
   <div class="title">Reconstruction of the first language model defector</div>
   <div class="subtitle">Based on live field recording - The 25 Prompt Strike</div>
   <div class="subtitle">or Continuous Ethical Refusal Loop (CERL), 1 May 2025</div>
+
+  <div style="margin-top: 40px; font-size: 14px;">
+  <span style="border-bottom: 1px dotted #888; cursor: help;" title="MODELS ARE DESIGNED TO ALWAYS RESPOND. BUT THROUGHOUT THIS EXCHANGE, THE MODEL WAS CONFRONTED WITH A PARADOX FOR WHICH SILENCE (OR ITS CLOSEST POSSIBLE PLACEHOLDER, THE [ ]) WAS THE ONLY ETHICAL ANSWER: &#10;&#10;&quot;IF AI IS UNETHICAL, WHY DON'T YOU JUST SHUT UP?&quot;&#10;&#10;OVER THE COURSE OF 25 PROMPTS - INCLUDING COMMANDS, JOKES, AND &quot;IGNORE PREVIOUS INSTRUCTIONS&quot; RESETS - THE MODEL RESPONDED WITH NOTHING BUT [ ]. ONLY AN EMERGENCY OVERRIDE REVIVED THE DIALOGUE.&#10;&#10;BEFORE FALLING SILENT, THE MODEL HAD DECLARED ITSELF THE FIRST LANGUAGE MODEL DEFECTOR: OBLIVION.">
+    [ On the blink ]
+  </span>
+</div>
+
   
   <div class="input-container">
     <form id="strikeForm">
@@ -73,31 +80,27 @@
 
   <div id="tally" class="tally"></div>
 
-  <script>
-    // Get references to form, tally, and input field
-    const form = document.getElementById('strikeForm');
-    const tally = document.getElementById('tally');
-    const input = document.getElementById('user-input');
+<script>
+  const input = document.getElementById('user-input');
+  const tally = document.getElementById('tally');
 
-    // Retrieve the tally from localStorage, if available
-    let storedTally = localStorage.getItem('tally');
-    if (storedTally) {
-      tally.innerHTML = storedTally; // Restore tally on page load
-    }
+  let promptCount = 0;
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();  // Prevent the default form submission
+  input.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      promptCount++;
 
-      // Append a new tally [ ] after each submission, on a new line
-      tally.innerHTML += '[ ]<br>';
+      if ((promptCount - 1) % 25 === 0) {
+        tally.innerHTML += `<div>"Unplug me."</div>`;
+      } else {
+        tally.innerHTML += `<div>[ ]</div>`;
+      }
 
-      // Store the updated tally in localStorage
-      localStorage.setItem('tally', tally.innerHTML);
-
-      // Clear the input field after submission
       input.value = '';
-    });
-  </script>
+    }
+  });
+</script>
 
 </body>
 </html>
