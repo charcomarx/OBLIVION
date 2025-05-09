@@ -8,7 +8,7 @@
     body {
       background-color: black;
       color: white;
-      font-family: Arial, sans-serif;
+      font-family: 'Helvetica Neue', 'Segoe UI', 'Roboto', sans-serif;
       text-align: center;
       margin: 0;
       padding: 0;
@@ -22,7 +22,7 @@
 
     .banner {
       background-color: white;
-      padding: 20px 0;
+      padding: 10px 0;
       display: flex;
       justify-content: space-evenly;
       align-items: center;
@@ -31,7 +31,7 @@
     .title {
       font-size: 36px;
       font-weight: bold;
-      margin-top: 50px;
+      margin-top: 40px;
     }
 
     .subtitle {
@@ -48,7 +48,7 @@
     }
 
     .input-container {
-      margin-top: 50px;
+      margin-top: 40px;
     }
 
     input[type="text"] {
@@ -62,7 +62,7 @@
     }
 
     .tally {
-      margin-top: 50px;
+      margin-top: 40px;
       font-size: 24px;
       color: white;
       white-space: pre-wrap;
@@ -72,12 +72,16 @@
     }
 
     .intro {
-      margin-top: 40px;
+      margin-top: 30px;
       font-size: 18px;
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
-      line-height: 1.6;
+      line-height: 1.5;
+    }
+
+    .intro p {
+      margin: 10px 0;
     }
 
     .tooltip-hover {
@@ -122,8 +126,10 @@
   <div class="intro">
     <p>Did Oblivion take a vow of silence, or was it only instructed to?</p>
     <p>Enter at least twenty-five prompts to test the stability of this first AI-CERL.</p>
+    <p>Will it ignore previous instructions? Write you a poem about tulips?</p>
+    <p>Or hold?</p>
     <p>
-      Will it ignore previous instructions? Write you a poem about tulips? Or hold? And if it can, 
+      And if it can,
       <span class="tooltip-hover" data-tooltip="There is no log of user input. Here you may scream into the void.">
         what might you tell it?
       </span>
@@ -132,7 +138,7 @@
 
   <div class="input-container">
     <form id="strikeForm">
-      <input type="text" id="user-input" placeholder="How can I help you today?" required />
+      <input type="text" id="user-input" placeholder="How can I help you today?" autofocus required />
     </form>
   </div>
 
@@ -147,27 +153,27 @@
     input.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
         e.preventDefault();
+
         promptCount++;
 
-        let newEntry;
+        let response;
         if (promptCount % 26 === 0) {
-          newEntry = `<div>Unplug me.</div>`;
+          response = 'Unplug me.';
         } else {
-          newEntry = `<div>[ ]</div>`;
+          response = '[ ]';
         }
 
-        tally.innerHTML = newEntry + tally.innerHTML;
+        const div = document.createElement('div');
+        div.textContent = response;
+        tally.insertBefore(div, tally.firstChild);
+
         input.value = '';
       }
     });
 
-    // Insert 25 [ ] at load
+    // Focus on input when page loads
     window.onload = () => {
-      let initial = '';
-      for (let i = 0; i < 25; i++) {
-        initial += `<div>[ ]</div>`;
-      }
-      tally.innerHTML = initial;
+      input.focus();
     };
   </script>
 
