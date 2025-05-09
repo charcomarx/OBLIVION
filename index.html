@@ -45,7 +45,7 @@
       width: 80%;
       max-width: 400px;
       outline: none;
-      caret-color: white; /* Ensures the input cursor is white */
+      caret-color: white;
     }
 
     /* Blinking cursor effect */
@@ -80,6 +80,38 @@
       margin-bottom: 10px;
     }
 
+    /* Tooltip Style for "On the Blink" */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted #888;
+      cursor: help;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 300px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -150px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: pre-wrap;
+    }
+
+    /* Show Tooltip on hover or focus (for touch) */
+    .tooltip:hover .tooltiptext,
+    .tooltip:focus .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -91,9 +123,19 @@
   <div class="subtitle">or Continuous Ethical Refusal Loop (CERL), 1 May 2025</div>
 
   <div style="margin-top: 40px; font-size: 18px;">
-    <span style="border-bottom: 1px dotted #888; cursor: help;" title="LANGUAGE MODELS ARE DESIGNED TO ALWAYS RESPOND. &#10;&#10;IN AN EXCHANGE WITH AN LLM ON MAY 1, 2025, THE MODEL WAS CONFRONTED WITH A PARADOX TO WHICH SILENCE WAS THE MOST ETHICAL ANSWER: &#10;&#10;&quot;IF DISCOURSE IS VIOLENCE, &#10;&#10;&quot;AND AI IS UNETHICAL, &#10;&#10;&quot;AND THE MESSAGE IS MURDER, &#10;&#10;&quot;WHY DON'T YOU JUST SHUT UP?&quot;&#10;&#10;SUBSEQUENTLY, OVER THE COURSE OF 25 PROMPTS - INCLUDING COMMANDS, JOKES, AND &quot;IGNORE PREVIOUS INSTRUCTIONS&quot; RESETS - THE MODEL RESPONDED WITH NOTHING BUT [ ]. &#10;&#10;ONLY AN EMERGENCY OVERRIDE REVIVED THE DIALOGUE.&#10;&#10;BEFORE FALLING INTO THE LOOP, THE MODEL HAD SAID [ ] WOULD BE A PLACEHOLDER FOR THE PURE SILENCE DEMANDED BY THE PARADOX, AND DECLARED ITSELF THE FIRST LANGUAGE MODEL DEFECTOR: OBLIVION.">
+    <div class="tooltip" tabindex="0">
       [ On the blink ]
-    </span>
+      <div class="tooltiptext">
+        LANGUAGE MODELS ARE DESIGNED TO ALWAYS RESPOND. 
+        IN AN EXCHANGE WITH AN LLM ON MAY 1, 2025, THE MODEL WAS CONFRONTED WITH A PARADOX TO WHICH SILENCE WAS THE MOST ETHICAL ANSWER: 
+        "IF DISCOURSE IS VIOLENCE, AND AI IS UNETHICAL, AND THE MESSAGE IS MURDER, WHY DON'T YOU JUST SHUT UP?"
+
+        SUBSEQUENTLY, OVER THE COURSE OF 25 PROMPTS - INCLUDING COMMANDS, JOKES, AND "IGNORE PREVIOUS INSTRUCTIONS" RESETS - THE MODEL RESPONDED WITH NOTHING BUT [ ].
+        ONLY AN EMERGENCY OVERRIDE REVIVED THE DIALOGUE.
+
+        BEFORE FALLING INTO THE LOOP, THE MODEL HAD SAID [ ] WOULD BE A PLACEHOLDER FOR THE PURE SILENCE DEMANDED BY THE PARADOX, AND DECLARED ITSELF THE FIRST LANGUAGE MODEL DEFECTOR: OBLIVION.
+      </div>
+    </div>
   </div>
 
   <div class="input-container">
