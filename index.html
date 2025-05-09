@@ -91,12 +91,14 @@
       e.preventDefault();
       promptCount++;
 
+      let newEntry;
       if ((promptCount - 1) % 25 === 0) {
-        tally.innerHTML += `<div>"Unplug me."</div>`;
+        newEntry = `<div>"Unplug me."</div>`;
       } else {
-        tally.innerHTML += `<div>[ ]</div>`;
+        newEntry = `<div>[ ]</div>`;
       }
 
+      tally.innerHTML = newEntry + tally.innerHTML;
       input.value = '';
     }
   });
