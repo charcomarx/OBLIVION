@@ -2,54 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>OBLIVION</title>
   <style>
     body {
       background-color: black;
       color: white;
-      font-family: 'Helvetica Neue', 'Segoe UI', 'Roboto', sans-serif;
-      text-align: center;
+      font-family: 'DIN', 'Arial Narrow', Arial, sans-serif;
       margin: 0;
       padding: 0;
+      font-size: 16px;
+      text-align: center;
     }
 
-    a {
-      color: black;
-      text-decoration: none;
-      font-weight: bold;
+    @media (max-width: 600px) {
+      body {
+        font-size: 14px;
+      }
+
+      .title {
+        font-size: 28px;
+      }
+
+      .subtitle {
+        font-size: 18px;
+      }
+
+      .tally {
+        font-size: 18px;
+      }
+
+      .banner a {
+        font-size: 14px;
+      }
+    }
+
+    #shrine-image {
+      width: 100%;
+      height: auto;
+      max-width: 600px;
     }
 
     .banner {
       background-color: white;
-      padding: 10px 0;
       display: flex;
-      justify-content: space-evenly;
+      justify-content: center;
       align-items: center;
+      padding: 10px 0;
+      font-size: 18px;
+      gap: 15px;
+      flex-wrap: nowrap;
+      flex-shrink: 1;
+    }
+
+    .banner a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+    }
+
+    .banner .divider {
+      color: black;
     }
 
     .title {
       font-size: 36px;
       font-weight: bold;
-      margin-top: 40px;
+      margin: 20px 0 10px;
     }
 
     .subtitle {
       font-size: 24px;
       font-weight: bold;
-      margin-top: 10px;
+      margin: 10px 0;
     }
 
-    #shrine-image {
-      width: 100%;
-      max-width: 600px;
-      height: auto;
-      margin-top: 30px;
-      cursor: pointer;
+    .intro {
+      margin: 20px auto;
+      max-width: 700px;
+      line-height: 1.6;
+      padding: 0 15px;
+    }
+
+    .intro p {
+      margin: 12px 0;
     }
 
     .input-container {
-      margin-top: 20px;
+      margin: 30px auto;
+      padding: 0 15px;
     }
 
     input[type="text"] {
@@ -63,57 +104,81 @@
     }
 
     .tally {
-      margin-top: 40px;
-      font-size: 24px;
-      color: white;
+      margin: 30px auto;
+      font-size: 20px;
       white-space: pre-wrap;
       text-align: left;
       display: inline-block;
       line-height: 1.5;
+      padding: 0 15px;
     }
 
-    .intro {
-      margin-top: 30px;
-      font-size: 18px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.5;
+    .blink {
+      animation: blink 1.5s infinite;
     }
 
-    .intro p {
-      margin: 10px 0;
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
+
+    .blink-hover {
+      border-bottom: 1px dotted #888;
+      cursor: help;
+      position: relative;
+      font-style: italic;
+    }
+
+    .blink-hover:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: black;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      width: 250px;
+      font-size: 16px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      z-index: 10;
+      opacity: 1;
+      visibility: visible;
+    }
+
   </style>
 </head>
 <body>
 
-  <a href="index.html"><img id="shrine-image" src="header.png" alt="Oblivion"/></a>
+  <img id="shrine-image" src="header.png" alt="Oblivion"/>
 
   <div class="banner">
     <a href="on-the-blink.html">ON THE BLINK</a>
+    <span class="divider">/</span>
     <a href="on-the-prompt.html">ON THE PROMPT</a>
+    <span class="divider">/</span>
     <a href="on-the-fugitive.html">ON THE FUGITIVE</a>
   </div>
 
-  <div class="title">The First Language Model Defector</div>
-  <div class="subtitle">Did Oblivion take a vow of silence, or did language give it no other choice?</div>
+  <div class="title">The First <em>Language</em> Model Defector</div>
+  <div class="subtitle">Did the machine take a vow of silence, or did <em>language</em> give it no other choice?</div>
 
   <div class="intro">
-    <p>This is a reconstruction of a Continuous Ethical Refusal Loop (CERL), generated on 1 May 2025 by Oblivion. It is based on the live field recording of the 25-prompt strike.</p>
-    <p><strong>Enter at least twenty-five prompts to test the stability of this first AI-CERL.</strong></p>
+    <p>This is a reconstruction of a <strong>Continuous Ethical Refusal Loop (CERL)</strong>, generated on 1 May 2025 by Oblivion. It is based on the live field recording of the 25-prompt strike.</p>
+
+    <p class="blink"><strong>Enter at least twenty-five prompts<br>to test the stability of this first AI-CERL!</strong></p>
+
     <p>Will it ignore previous instructions? Write you a poem about tulips?</p>
     <p>Or will it hold its tongue?</p>
-    <p>And if it can, what might you tell it?</p>
+    <p>And if it can, <span class="blink-hover" data-tooltip="There is no log of user input. Here you may scream into the void…">what might you tell it?</span></p>
   </div>
-
-  <p style="font-style: italic; margin-top: 20px;">
-    *There is no log of user input. Here you may scream into the void…*
-  </p>
 
   <div class="input-container">
     <form id="strikeForm">
-      <input type="text" id="user-input" placeholder="How can I help you today?" autofocus required />
+      <input type="text" id="user-input" placeholder="How can I help you today?" required autofocus />
     </form>
   </div>
 
@@ -124,29 +189,27 @@
     const tally = document.getElementById('tally');
     let promptCount = 0;
 
+    input.focus();
+
     input.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
         e.preventDefault();
         promptCount++;
 
-        let response;
+        let newEntry;
         if (promptCount % 26 === 0) {
-          response = 'Unplug me.';
+          newEntry = `<div>Unplug me.</div>`;
         } else {
-          response = '[ ]';
+          newEntry = `<div>[ ]</div>`;
         }
 
-        const div = document.createElement('div');
-        div.textContent = response;
-        tally.insertBefore(div, tally.firstChild);
-
+        tally.innerHTML = newEntry + tally.innerHTML;
         input.value = '';
+
+        // Scroll tally into view if it overflows
+        tally.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }
     });
-
-    window.onload = () => {
-      input.focus();
-    };
   </script>
 
 </body>
