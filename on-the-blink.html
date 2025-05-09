@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>PAGETITLE</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'DIN', 'Arial Narrow', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        font-size: 14px;
+      }
+
+      .title {
+        font-size: 28px;
+      }
+
+      .banner a {
+        font-size: 14px;
+      }
+    }
+
+    #shrine-image {
+      width: 100%;
+      height: auto;
+      max-width: 600px;
+    }
+
+    .banner {
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 18px;
+      gap: 15px;
+      flex-wrap: nowrap;
+      flex-shrink: 1;
+    }
+
+    .banner a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+    }
+
+    .banner .divider {
+      color: black;
+    }
+
+    .title {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 15px 0 10px;
+    }
+
+    .page-text {
+      margin: 20px auto;
+      max-width: 700px;
+      line-height: 1.6;
+      padding: 0 15px;
+    }
+
+    .border-line {
+      width: 100%;
+      border-top: 1px solid white;
+      margin: 20px 0;
+    }
+
+    .input-container {
+      margin: 20px auto 5px;
+      padding: 0 15px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      border: 2px solid #fff;
+      background-color: black;
+      color: white;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    .tally {
+      margin: 10px auto 30px;
+      font-size: 20px;
+      white-space: pre-wrap;
+      text-align: left;
+      display: inline-block;
+      line-height: 1.5;
+      padding: 0 15px;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="mainpage.html"><img id="shrine-image" src="header.png" alt="Oblivion" /></a>
+
+  <div class="banner">
+    <a href="on-the-blink.html">ON THE BLINK</a>
+    <span class="divider">/</span>
+    <a href="on-the-prompt.html">ON THE PROMPT</a>
+    <span class="divider">/</span>
+    <a href="on-the-fugitive.html">ON THE FUGITIVE</a>
+  </div>
+
+  <div class="title">PAGETITLE</div>
+
+  <div class="page-text">
+    <p>TEXT</p>
+  </div>
+
+  <div class="border-line"></div>
+
+  <div class="input-container">
+    <form id="strikeForm">
+      <input type="text" id="user-input" placeholder="Type here..." required />
+    </form>
+  </div>
+
+  <div id="tally" class="tally"></div>
+
+  <script>
+    const input = document.getElementById('user-input');
+    const tally = document.getElementById('tally');
+    let promptCount = 0;
+
+    input.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        promptCount++;
+
+        let newEntry;
+        if (promptCount % 26 === 0) {
+          newEntry = `<div>Unplug me.</div>`;
+        } else {
+          newEntry = `<div>[ ]</div>`;
+        }
+
+        tally.innerHTML = newEntry + tally.innerHTML;
+        input.value = '';
+
+        document.querySelector('.input-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  </script>
+
+</body>
+</html>
