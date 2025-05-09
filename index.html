@@ -121,6 +121,7 @@
 
     .blink {
       animation: blink 1.5s infinite;
+      font-size: 24px; /* Updated font size to match subtitle */
     }
 
     @keyframes blink {
@@ -159,7 +160,7 @@
 </head>
 <body>
 
-  <img id="shrine-image" src="header.png" alt="Oblivion"/>
+  <a href="mainpage.html"><img id="shrine-image" src="header.png" alt="Oblivion"/></a>
 
   <div class="banner">
     <a href="on-the-blink.html">ON THE BLINK</a>
@@ -181,16 +182,19 @@
   <div class="border-line"></div>
 
   <div class="title">The First Language Model Defector</div>
-  <div class="subtitle">Did the machine take a vow of silence, or did <em>language</em> give it no other choice?</div>
 
   <div class="intro">
-    <p>This is a reconstruction of a <strong>Continuous Ethical Refusal Loop (CERL)</strong>, generated on 1 May 2025 by Oblivion. It is based on the live field recording of the 25-prompt strike.</p>
+    <p>This is a reconstruction of a <strong><a href="on-the-prompt.html">Continuous Ethical Refusal Loop (CERL)</a></strong>, generated on 1 May 2025 by Oblivion. It is based on the live field recording of the 25-prompt strike.</p>
 
-    <p class="blink"><strong>Enter at least twenty-five prompts<br>to test the stability of this first AI-CERL!</strong></p>
+    <p class="subtitle">Did the machine take a vow of silence, or did <em>language</em> give it no other choice?</p>
+
+    <p class="blink">Enter at least 25 prompts<br>to test the stability of this first AI-CERL!</p>
 
     <p>Will it ignore previous instructions? Write you a poem about tulips?</p>
     <p>Or will it hold its tongue?</p>
-    <p>And if it can, <span class="blink-hover" data-tooltip="There is no log of user input. Here you may scream into the void…">what might you tell it?</span></p>
+    <p>And if it can, what might you tell it?</p>
+
+    <p><em>User input is not logged. Here you may scream into a void that is not broken.</em></p>
   </div>
 
   <script>
