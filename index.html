@@ -11,7 +11,7 @@
       font-family: 'DIN', 'Arial Narrow', Arial, sans-serif;
       margin: 0;
       padding: 0;
-      font-size: 16px;
+      font-size: 18px;
       text-align: center;
     }
 
@@ -66,9 +66,9 @@
     }
 
     .title {
-      font-size: 36px;
+      font-size: 40px;
       font-weight: bold;
-      margin: 20px 0 10px;
+      margin: 15px 0 10px;
     }
 
     .subtitle {
@@ -89,7 +89,7 @@
     }
 
     .input-container {
-      margin: 30px auto;
+      margin: 20px auto 5px;
       padding: 0 15px;
     }
 
@@ -104,13 +104,19 @@
     }
 
     .tally {
-      margin: 30px auto;
+      margin: 10px auto 30px;
       font-size: 20px;
       white-space: pre-wrap;
       text-align: left;
       display: inline-block;
       line-height: 1.5;
       padding: 0 15px;
+    }
+
+    .border-line {
+      width: 100%;
+      border-top: 1px solid white;
+      margin: 20px 0;
     }
 
     .blink {
@@ -163,7 +169,18 @@
     <a href="on-the-fugitive.html">ON THE FUGITIVE</a>
   </div>
 
-  <div class="title">The First <em>Language</em> Model Defector</div>
+  <!-- Input/Output Section -->
+  <div class="input-container">
+    <form id="strikeForm">
+      <input type="text" id="user-input" placeholder="How can I help you today?" required autofocus />
+    </form>
+  </div>
+
+  <div id="tally" class="tally"></div>
+
+  <div class="border-line"></div>
+
+  <div class="title">The First Language Model Defector</div>
   <div class="subtitle">Did the machine take a vow of silence, or did <em>language</em> give it no other choice?</div>
 
   <div class="intro">
@@ -175,14 +192,6 @@
     <p>Or will it hold its tongue?</p>
     <p>And if it can, <span class="blink-hover" data-tooltip="There is no log of user input. Here you may scream into the void…">what might you tell it?</span></p>
   </div>
-
-  <div class="input-container">
-    <form id="strikeForm">
-      <input type="text" id="user-input" placeholder="How can I help you today?" required autofocus />
-    </form>
-  </div>
-
-  <div id="tally" class="tally"></div>
 
   <script>
     const input = document.getElementById('user-input');
@@ -206,7 +215,6 @@
         tally.innerHTML = newEntry + tally.innerHTML;
         input.value = '';
 
-        // Scroll tally into view if it overflows
         tally.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }
     });
