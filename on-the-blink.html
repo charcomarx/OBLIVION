@@ -5,113 +5,115 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>PAGETITLE</title>
   <style>
+  body {
+    background-color: black;
+    color: white;
+    font-family: 'DIN', 'Arial Narrow', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+  }
+
+  @media (max-width: 600px) {
     body {
-      background-color: black;
-      color: white;
-      font-family: 'DIN', 'Arial Narrow', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      font-size: 18px;
-      /* text-align removed to prevent unintended global centering */
-    }
-
-    @media (max-width: 600px) {
-      body {
-        font-size: 14px;
-      }
-
-      .title {
-        font-size: 28px;
-      }
-
-      .banner a {
-        font-size: 14px;
-      }
-    }
-
-    #shrine-image {
-      width: 100%;
-      height: auto;
-      max-width: 600px;
-    }
-
-    .banner {
-      background-color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 10px 0;
-      font-size: 18px;
-      gap: 15px;
-      flex-wrap: nowrap;
-      flex-shrink: 1;
-    }
-
-    .banner a {
-      text-decoration: none;
-      color: black;
-      font-weight: bold;
-    }
-
-    .banner .divider {
-      color: black;
+      font-size: 14px;
     }
 
     .title {
-      font-size: 40px;
-      font-weight: bold;
-      margin: 15px 0 10px;
-      text-align: center;
+      font-size: 28px;
     }
 
-    .page-text {
-      margin: 20px auto;
-      max-width: 700px;
-      line-height: 1.6;
-      padding: 0 15px;
-      text-align: left;
+    .banner a {
+      font-size: 14px;
     }
+  }
 
-    .border-line {
-      width: 100%;
-      border-top: 1px solid white;
-      margin: 20px 0;
-    }
+  #shrine-image {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+  }
 
-    .input-container {
-      margin: 20px auto 5px;
-      padding: 0 15px;
-    }
+  .banner {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 18px;
+    gap: 15px;
+    flex-wrap: nowrap;
+    flex-shrink: 1;
+  }
 
-    input[type="text"] {
-      padding: 10px;
-      font-size: 18px;
-      border: 2px solid #fff;
-      background-color: black;
-      color: white;
-      width: 80%;
-      max-width: 400px;
-    }
+  .banner a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+  }
 
-    .tally {
-      margin: 10px auto 30px;
-      font-size: 20px;
-      white-space: pre-wrap;
-      text-align: left;
-      display: inline-block;
-      line-height: 1.5;
-      padding: 0 15px;
-    }
+  .banner .divider {
+    color: black;
+  }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+  .title {
+    font-size: 40px;
+    font-weight: bold;
+    margin: 15px 0 10px;
+    text-align: center;
+  }
 
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  .page-text {
+    margin: 20px auto;
+    max-width: 700px;
+    line-height: 1.6;
+    padding: 0 15px;
+    text-align: left;
+  }
+
+  .border-line {
+    width: 100%;
+    border-top: 1px solid white;
+    margin: 20px 0;
+  }
+
+  .input-container {
+    margin: 20px auto 5px;
+    padding: 0 15px;
+    text-align: center;
+  }
+
+  input[type="text"] {
+    padding: 10px;
+    font-size: 18px;
+    border: 2px solid #fff;
+    background-color: black;
+    color: white;
+    width: 80%;
+    max-width: 400px;
+  }
+
+  .tally {
+    margin: 10px auto 30px;
+    font-size: 20px;
+    white-space: pre-wrap;
+    text-align: left;
+    display: inline-block;
+    line-height: 1.5;
+    padding: 0 15px;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+</style>
 </head>
 <body>
 
