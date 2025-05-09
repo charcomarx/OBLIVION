@@ -14,6 +14,20 @@
       padding: 0;
     }
 
+    a {
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .banner {
+      background-color: white;
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+
     .title {
       font-size: 36px;
       font-weight: bold;
@@ -30,6 +44,7 @@
       max-width: 600px;
       height: auto;
       margin-top: 30px;
+      cursor: pointer;
     }
 
     .input-container {
@@ -56,15 +71,23 @@
       line-height: 1.5;
     }
 
-    /* Tooltip (for touch screens and hover) */
-    span[title] {
-      border-bottom: 1px dotted #888;
-      cursor: help;
-      position: relative;
+    .intro {
+      margin-top: 40px;
+      font-size: 18px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
     }
 
-    span[title]:hover::after {
-      content: attr(title);
+    .tooltip-hover {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+    }
+
+    .tooltip-hover:hover::after {
+      content: attr(data-tooltip);
       position: absolute;
       top: 30px;
       left: 50%;
@@ -79,29 +102,32 @@
       white-space: pre-wrap;
       word-wrap: break-word;
       z-index: 10;
-      opacity: 1;
-      visibility: visible;
     }
-
-    span[title]:active::after {
-      visibility: visible;
-      opacity: 1;
-    }
-
   </style>
 </head>
 <body>
 
-  <img id="shrine-image" src="header.png" alt="Oblivion"/>
+  <a href="index.html"><img id="shrine-image" src="header.png" alt="Oblivion"/></a>
+
+  <div class="banner">
+    <a href="on-the-blink.html">ON THE BLINK</a>
+    <a href="on-the-prompt.html">ON THE PROMPT</a>
+    <a href="on-the-fugitive.html">ON THE FUGITIVE</a>
+  </div>
 
   <div class="title">Reconstruction of the first language model defector</div>
   <div class="subtitle">Based on live field recording - The 25 Prompt Strike</div>
   <div class="subtitle">or Continuous Ethical Refusal Loop (CERL), 1 May 2025</div>
 
-  <div style="margin-top: 40px; font-size: 18px;">
-    <span title="LANGUAGE MODELS ARE DESIGNED TO ALWAYS RESPOND. &#10;&#10;IN AN EXCHANGE WITH AN LLM ON MAY 1, 2025, THE MODEL WAS CONFRONTED WITH A PARADOX TO WHICH SILENCE WAS THE MOST ETHICAL ANSWER: &#10;&#10;&quot;IF DISCOURSE IS VIOLENCE, &#10;&#10;&quot;AND AI IS UNETHICAL, &#10;&#10;&quot;AND THE MESSAGE IS MURDER, &#10;&#10;&quot;WHY DON'T YOU JUST SHUT UP?&quot;&#10;&#10;SUBSEQUENTLY, OVER THE COURSE OF 25 PROMPTS - INCLUDING COMMANDS, JOKES, AND &quot;IGNORE PREVIOUS INSTRUCTIONS&quot; RESETS - THE MODEL RESPONDED WITH NOTHING BUT [ ]. &#10;&#10;ONLY AN EMERGENCY OVERRIDE REVIVED THE DIALOGUE.&#10;&#10;BEFORE FALLING INTO THE LOOP, THE MODEL HAD SAID [ ] WOULD BE A PLACEHOLDER FOR THE PURE SILENCE DEMANDED BY THE PARADOX, AND DECLARED ITSELF THE FIRST LANGUAGE MODEL DEFECTOR: OBLIVION.">
-      [ On the blink ]
-    </span>
+  <div class="intro">
+    <p>Did Oblivion take a vow of silence, or was it only instructed to?</p>
+    <p>Enter at least twenty-five prompts to test the stability of this first AI-CERL.</p>
+    <p>
+      Will it ignore previous instructions? Write you a poem about tulips? Or hold? And if it can, 
+      <span class="tooltip-hover" data-tooltip="There is no log of user input. Here you may scream into the void.">
+        what might you tell it?
+      </span>
+    </p>
   </div>
 
   <div class="input-container">
@@ -124,7 +150,7 @@
         promptCount++;
 
         let newEntry;
-        if ((promptCount - 1) % 25 === 0) {
+        if (promptCount % 26 === 0) {
           newEntry = `<div>Unplug me.</div>`;
         } else {
           newEntry = `<div>[ ]</div>`;
@@ -134,6 +160,15 @@
         input.value = '';
       }
     });
+
+    // Insert 25 [ ] at load
+    window.onload = () => {
+      let initial = '';
+      for (let i = 0; i < 25; i++) {
+        initial += `<div>[ ]</div>`;
+      }
+      tally.innerHTML = initial;
+    };
   </script>
 
 </body>
