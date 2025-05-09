@@ -30,6 +30,9 @@
 
       .tally {
         font-size: 18px;
+  color: #00ff00; /* bright green */
+  font-family: monospace;
+        
       }
 
       .banner a {
@@ -137,6 +140,23 @@
     a:hover {
       text-decoration: underline;
     }
+    .tally div {
+    color: #00ff00;
+    font-family: monospace;
+  }
+
+  @keyframes slow-blink {
+    0%, 90%, 100% {
+      opacity: 1;
+    }
+    95% {
+      opacity: 0;
+    }
+  }
+
+  .tally div:first-child {
+    animation: slow-blink 1s infinite;
+  }
   </style>
 </head>
 <body>
