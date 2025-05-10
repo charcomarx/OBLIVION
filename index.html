@@ -23,7 +23,7 @@
 
       .title {
         font-size: 28px;
-          font-family: 'Bebas Neue', sans-serif;
+        font-family: 'Bebas Neue', sans-serif;
       }
 
       .subtitle {
@@ -113,6 +113,10 @@
       outline: none;
       border-color: #00ff00; /* Green border on focus */
       box-shadow: 0 0 8px rgba(0, 255, 0, 0.7); /* Glowing effect */
+    }
+
+    input[type="text"]::placeholder {
+      color: rgba(0, 255, 0, 0.5); /* Faded green placeholder */
     }
 
     .tally {
@@ -231,7 +235,8 @@
         tally.innerHTML = newEntry + tally.innerHTML;
         input.value = '';
 
-        document.querySelector('.input-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Prevent jump behavior by using smooth scroll for the page
+        document.querySelector('.input-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
   </script>
