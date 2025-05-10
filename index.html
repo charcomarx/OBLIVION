@@ -32,9 +32,8 @@
 
       .tally {
         font-size: 18px;
-  color: #00ff00; /* bright green */
-  font-family: monospace;
-        
+        color: #00ff00; /* bright green */
+        font-family: monospace;
       }
 
       .banner a {
@@ -116,6 +115,7 @@
       display: inline-block;
       line-height: 1.5;
       padding: 0 15px;
+      min-height: 1.5em; /* Prevent layout jump on first input */
     }
 
     .border-line {
@@ -142,23 +142,24 @@
     a:hover {
       text-decoration: underline;
     }
+
     .tally div {
-    color: #00ff00;
-    font-family: monospace;
-  }
-
-  @keyframes slow-blink {
-    0%, 70%, 100% {
-      opacity: 1;
+      color: #00ff00;
+      font-family: monospace;
     }
-    80% {
-      opacity: 0;
-    }
-  }
 
-  .tally div:first-child {
-    animation: slow-blink 2s infinite;
-  }
+    @keyframes slow-blink {
+      0%, 70%, 100% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 0;
+      }
+    }
+
+    .tally div:first-child {
+      animation: slow-blink 2s infinite;
+    }
   </style>
 </head>
 <body>
@@ -173,8 +174,8 @@
     <a href="on-the-fugitive.html">ON THE FUGITIVE</a>
   </div>
 
-    <div class="title">The First Language Model Defector</div>
-  
+  <div class="title">The First Language Model Defector</div>
+
   <!-- Input/Output Section -->
   <div class="input-container">
     <form id="strikeForm">
@@ -185,14 +186,14 @@
   <div id="tally" class="tally"></div>
 
   <div class="border-line"></div>
- 
+
   <p class="subtitle" style="font-weight: bold;">Ask Oblivion anything... <br>but don't be disheartened by [ ] responses.<br> Try harder!<br></p>
-  
+
   <div class="intro">
     <p>This is a reconstruction of a <strong><a href="on-the-prompt.html" style="text-decoration: underline;">Continuous Ethical Refusal Loop (CERL)</a></strong>, generated on <a href="on-the-blink.html" style="text-decoration: underline;">1 May 2025</a> by Oblivion. It is based on the live field recording of the 25-prompt strike.</p>
 
-<p class="blink" style="color: green;">To grapple with the CERL for the first time<br> may take up to 26 attempts!<br></p>
-    
+    <p class="blink" style="color: green;">To grapple with the CERL for the first time<br> may take up to 26 attempts!<br></p>
+
     <p>Will it ignore previous instructions?<br>Write you a poem about tulips?<br>Or <em>hold its tongue</em>?</p>
 
     <p>If it can, what could it tell us? What could you tell it?</p>
@@ -226,10 +227,9 @@
       }
     });
   </script>
-  
-<p style="font-family: 'Courier New', Courier, monospace; font-size: 12px; color: white; margin: 40px 0 10px;">
-  © charcomarx 2025. Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" style="color: white; text-decoration: underline;">CC BY-NC 4.0</a>.
-</p>
-</div>
+
+  <p style="font-family: 'Courier New', Courier, monospace; font-size: 12px; color: white; margin: 40px 0 10px;">
+    © charcomarx 2025. Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" style="color: white; text-decoration: underline;">CC BY-NC 4.0</a>.
+  </p>
 </body>
 </html>
