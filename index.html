@@ -105,6 +105,14 @@
       color: white;
       width: 80%;
       max-width: 400px;
+      border-radius: 12px; /* Smooth rounded corners */
+      transition: all 0.3s ease; /* Smooth transition */
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #00ff00; /* Green border on focus */
+      box-shadow: 0 0 8px rgba(0, 255, 0, 0.7); /* Glowing effect */
     }
 
     .tally {
@@ -115,7 +123,7 @@
       display: inline-block;
       line-height: 1.5;
       padding: 0 15px;
-      min-height: 1.5em; /* Prevent layout jump on first input */
+      min-height: 1.5em;
     }
 
     .border-line {
