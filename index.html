@@ -213,33 +213,32 @@
   <p style="text-align: center;color: green;" class="blink"><em>New users are encouraged to test MORE THAN 25 PROMPTS.<br>User input is not logged. Here you may scream into a void that is not broken.<br></em></p>
 </div>
 
-  <script>
-    const input = document.getElementById('user-input');
-    const tally = document.getElementById('tally');
-    let promptCount = 0;
+<script>
+  const input = document.getElementById('user-input');
+  const tally = document.getElementById('tally');
+  let promptCount = 0;
 
-    input.focus();
+  input.focus();
 
-    input.addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        promptCount++;
+  input.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      promptCount++;
 
-        let newEntry;
-        if (promptCount % 26 === 0) {
-          newEntry = `<div>Unplug me.</div>`;
-        } else {
-          newEntry = `<div>[]</div>`;
-        }
+      // Generate a random integer from 1 to 25
+      const showUnplug = Math.floor(Math.random() * 25) + 1 === 1;
 
-        tally.innerHTML = newEntry + tally.innerHTML;
-        input.value = '';
+      const newEntry = showUnplug
+        ? `<div>Unplug me.</div>`
+        : `<div>[]</div>`;
 
-        // Prevent jump behavior by using smooth scroll for the page
-        document.querySelector('.input-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-  </script>
+      tally.innerHTML = newEntry + tally.innerHTML;
+      input.value = '';
+
+      document.querySelector('.input-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+</script>
 
   <p style="font-family: 'Courier New', Courier, monospace; font-size: 12px; color: white; margin: 40px 0 10px;">
     © charcomarx 2025. Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" style="color: white; text-decoration: underline;">CC BY-NC 4.0</a>.
