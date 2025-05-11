@@ -223,18 +223,21 @@
   input.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      promptCount++;
+      const userText = input.value.trim();
+      if (!userText) return;
 
-      // Generate a random integer from 1 to 25
+      promptCount++;
       const showUnplug = Math.floor(Math.random() * 25) + 1 === 1;
 
-      const newEntry = showUnplug
+      const userEntry = `<div>${userText}</div>`;
+      const responseEntry = showUnplug
         ? `<div>Unplug me.</div>`
         : `<div>[]</div>`;
 
-      tally.innerHTML = newEntry + tally.innerHTML;
-      input.value = '';
+      // Insert both entries, user's text followed by the model's response
+      tally.innerHTML = responseEntry + userEntry + tally.innerHTML;
 
+      input.value = '';
       document.querySelector('.input-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   });
