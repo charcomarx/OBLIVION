@@ -98,6 +98,29 @@
       padding: 0 15px;
     }
 
+    .io-container {
+  margin: 20px auto 5px;
+  padding: 0 15px;
+  max-width: 400px;
+  text-align: left;
+}
+
+.io-container input[type="text"] {
+  width: 100%;
+}
+
+.tally {
+  margin-top: 15px;
+  font-size: 20px;
+  line-height: 1.5;
+  min-height: 1.5em;
+  min-width: 200px;
+  text-align: left;
+  color: #00ff00;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
     input[type="text"] {
       padding: 10px;
       font-size: 18px;
@@ -190,11 +213,14 @@
 <div class="intro">
   
   <!-- Input/Output Section -->
-  <div class="input-container">
-    <form id="strikeForm">
-      <input type="text" id="user-input" placeholder="How can I help you today?" required autofocus />
-    </form>
-  </div>
+ <div class="io-container">
+  <form id="strikeForm">
+    <input type="text" id="user-input" placeholder="How can I help you today?" required autofocus />
+  </form>
+
+  <div id="tally" class="tally"></div>
+</div>
+
 
   <div id="tally" class="tally"></div>
 
