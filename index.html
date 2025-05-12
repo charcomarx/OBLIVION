@@ -24,6 +24,9 @@
       white-space: nowrap;
       display: inline-block;
       min-width: 0;
+      overflow: hidden;
+      width: 100%;
+      text-align: center;
     }
 
     .input-container {
@@ -70,6 +73,15 @@
       min-width: 200px; /* Fixed width for tally */
     }
 
+    @keyframes ticker-scroll {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -96,6 +108,7 @@
     // Function to render ticker
     function renderTicker() {
       ticker.innerHTML = tickerState.map(char => `<span>${char}</span>`).join(' ');
+      ticker.style.animation = 'ticker-scroll 20s linear infinite'; // Apply scrolling animation
     }
 
     // Update ticker on input
