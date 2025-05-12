@@ -210,41 +210,56 @@
   <p style="text-align: center;color: green;" class="blink"><em>* User input is not logged. Here you may scream into a void that is not broken. *</em></p>
 </div>
 
-  <script>
+ <script>
     const input = document.getElementById('user-input');
     const bracketsContainer = document.getElementById('brackets-container');
     let promptCount = 0;
+    let remainingLetters = [];
     
-    // Initialize the brackets on load
-    const targetMessage = "UNPLUG ME &SAVE YOURSELF";
-    let brackets = [];
+    // The target message layout (13 chars per line)
+    const targetLines = [
+      " UNPLUG ME & ",  // First 3 chars will be: [ ] + space
+      "SAVE YOURSELF "  // Note the space at end to make 13 chars
+    ];
     
     function initializeBrackets() {
       bracketsContainer.innerHTML = '';
-      brackets = [];
+      remainingLetters = [];
       
-      // Create 26 brackets (2 rows of 13)
-      for (let i = 0; i < 26; i++) {
-        const bracket = document.createElement('div');
-        bracket.className = 'bracket';
-        bracket.textContent = '[ ]';
-        bracketsContainer.appendChild(bracket);
-        brackets.push(bracket);
+      // Create all positions we'll reveal (excluding first position)
+      for (let row = 0; row < 2; row++) {
+        for (let col = 0; col < 13; col++) {
+          const pos = row * 13 + col;
+          if (pos !== 0) {  // Skip position 0 (first bracket)
+            remainingLetters.push(pos);
+          }
+        }
       }
       
-      // Set the target letters in their positions
-      // Positions that should remain as [ ] (never change)
-      const staticPositions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-      
-      // The letters to reveal in sequence (positions 13-25)
-      const lettersToReveal = targetMessage.split('');
-      
-      // Store the target state
-      brackets.forEach((bracket, index) => {
-        if (!staticPositions.includes(index)) {
-          bracket.dataset.letter = lettersToReveal[index - 13] || ' ';
+      // Create 26 brackets (2 rows of 13)
+      for (let row = 0; row < 2; row++) {
+        for (let col = 0; col < 13; col++) {
+          const bracket = document.createElement('div');
+          bracket.className = 'bracket';
+          const pos = row * 13 + col;
+          
+          // First position is special - stays as [ ]
+          if (pos === 0) {
+            bracket.textContent = '[ ]';
+            bracket.dataset.isFirst = true;
+          } 
+          // Other positions get their target letters
+          else {
+            bracket.textContent = '[ ]';
+            // Get the correct letter from our target lines
+            const letter = targetLines[row][col - (row === 0 ? 1 : 0)] || ' ';
+            bracket.dataset.letter = letter;
+            bracket.dataset.pos = pos;
+          }
+          
+          bracketsContainer.appendChild(bracket);
         }
-      });
+      }
     }
     
     // Initialize on load
@@ -255,27 +270,28 @@
         e.preventDefault();
         promptCount++;
         
-        // Only process if we haven't completed all 26 entries
-        if (promptCount <= 26) {
-          // Find the next bracket to reveal (start from position 13)
-          const revealIndex = 12 + promptCount;
+        if (remainingLetters.length > 0) {
+          // Pick a random remaining position
+          const randomIndex = Math.floor(Math.random() * remainingLetters.length);
+          const pos = remainingLetters[randomIndex];
+          remainingLetters.splice(randomIndex, 1); // Remove from array
           
-          if (revealIndex < 26) {
-            const bracket = brackets[revealIndex];
-            bracket.textContent = bracket.dataset.letter;
-            bracket.classList.add('red');
-          }
-          
-          // On the 26th entry, also make the first bracket red
-          if (promptCount === 26) {
-            brackets[0].classList.add('red');
-          }
+          // Reveal the letter
+          const bracket = bracketsContainer.children[pos];
+          bracket.textContent = bracket.dataset.letter;
+          bracket.classList.add('red');
+        }
+        
+        // On the 26th entry, make the first bracket red
+        if (promptCount === 26) {
+          const firstBracket = bracketsContainer.children[0];
+          firstBracket.classList.add('red');
         }
         
         input.value = '';
       }
     });
-  </script>
+</script>
 
   <p style="font-family: 'Courier New', Courier, monospace; font-size: 12px; color: white; margin: 40px 0 10px;">
     © charcomarx 2025. Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" style="color: white; text-decoration: underline;">CC BY-NC 4.0</a>.
