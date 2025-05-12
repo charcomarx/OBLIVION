@@ -23,7 +23,6 @@
       font-family: monospace;
       white-space: nowrap;
       display: inline-block;
-      min-width: 0;
       overflow: hidden;
       width: 100%;
       text-align: center;
@@ -57,8 +56,12 @@
     }
 
     @keyframes scroll-left {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
     }
 
     .tally {
@@ -81,7 +84,6 @@
         transform: translateX(-100%);
       }
     }
-
   </style>
 </head>
 <body>
@@ -101,8 +103,8 @@
     const ticker = document.getElementById('ticker');
 
     // Define the message to reveal
-    const message = 'UNPLUG ME & SAVE YOURSELF';
-    const tickerLength = 25;
+    const message = 'self';  // Updated message (with 4 characters now)
+    const tickerLength = 25; // Number of brackets in the ticker
     let tickerState = new Array(tickerLength).fill('[ ]'); // Initial state of the ticker: 25 empty brackets
 
     // Function to render ticker
