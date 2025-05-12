@@ -14,78 +14,87 @@
       padding: 0;
       font-size: 18px;
       text-align: center;
+      overflow-x: hidden;
     }
 
     /* Ticker container styles */
+    #ticker-container {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      width: 100vw;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
     #ticker {
-      margin-top: 20px;
-      font-size: 20px;
-      color: #ff3366; /* Red/Pink color for the ticker text */
+      display: inline-block;
+      font-size: 24px;
+      color: #ff3366;
       font-family: monospace;
       white-space: nowrap;
-      display: inline-block;
-      overflow: hidden;
-      width: 100%; /* Make the ticker span the entire width of the page */
-      text-align: center;
-      min-height: 30px; /* Ensuring ticker has consistent height */
+      padding: 20px 0;
       position: relative;
+      animation: scroll-left 15s linear infinite;
+    }
+
+    #ticker span {
+      display: inline-block;
+      width: 30px;
+      text-align: center;
+      margin: 0 5px;
+      transition: all 0.3s ease;
     }
 
     /* Input container styles */
     .input-container {
-      margin: 20px auto;
+      position: fixed;
+      bottom: 50px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
       padding: 0 15px;
+      z-index: 100;
     }
 
     input[type="text"] {
       padding: 10px;
       font-size: 18px;
-      border: 2px solid #ff3366; /* Red border */
+      border: 2px solid #ff3366;
       background-color: black;
       color: white;
       width: 80%;
       max-width: 400px;
-      border-radius: 12px; /* Smooth rounded corners */
-      transition: all 0.3s ease; /* Smooth transition */
+      border-radius: 12px;
+      transition: all 0.3s ease;
     }
 
     input[type="text"]:focus {
       outline: none;
-      border-color: #ff3366; /* Red border on focus */
-      box-shadow: 0 0 8px rgba(255, 51, 102, 0.7); /* Glowing effect */
+      border-color: #ff3366;
+      box-shadow: 0 0 8px rgba(255, 51, 102, 0.7);
     }
 
     input[type="text"]::placeholder {
-      color: #ff3366; /* Red placeholder text */
+      color: #ff3366;
     }
 
     /* Ticker animation */
     @keyframes scroll-left {
       0% {
-        transform: translateX(100%); /* Start from right */
+        transform: translateX(0);
       }
       100% {
-        transform: translateX(-100%); /* End at the left */
+        transform: translateX(-100%);
       }
     }
 
-    .tally {
-      margin-top: 20px;
-      font-size: 20px;
-      white-space: pre-wrap;
-      text-align: left;
-      display: inline-block;
-      line-height: 1.5;
-      padding: 0 15px;
-      min-height: 1.5em;
-      min-width: 200px; /* Fixed width for tally */
+    .revealed {
+      color: white !important;
+      transform: scale(1.2);
     }
-
-    /* Ensure continuous scrolling */
-    #ticker {
-      animation: scroll-left 15s linear infinite; /* Adjust this for desired speed */
-    }
-
   </style>
 </head>
 <body>
@@ -96,8 +105,10 @@
   </div>
 
   <!-- Ticker showing the string -->
-  <div id="ticker" class="tally">
-    <!-- Initially populated with 25 [ ] -->
+  <div id="ticker-container">
+    <div id="ticker">
+      <!-- Initially populated with 25 [ ] -->
+    </div>
   </div>
 
   <script>
@@ -105,29 +116,66 @@
     const ticker = document.getElementById('ticker');
 
     // Define the message to reveal
-    const message = 'UNPLUG ME & SAVE YOURSELF';
+    const message = 'UNPLUG AND SAVE YOURSELF';
     const tickerLength = 25; // Number of brackets in the ticker
     let tickerState = new Array(tickerLength).fill('[ ]'); // Initial state of the ticker: 25 empty brackets
+    let revealedCount = 0;
 
     // Function to render ticker
     function renderTicker() {
-      ticker.innerHTML = tickerState.map(char => `<span>${char}</span>`).join(' ');
+      // Create two copies of the ticker for seamless looping
+      ticker.innerHTML = '';
+      for (let i = 0; i < 2; i++) {
+        tickerState.forEach((char, index) => {
+          const span = document.createElement('span');
+          span.textContent = char;
+          if (char !== '[ ]') {
+            span.classList.add('revealed');
+          }
+          ticker.appendChild(span);
+        });
+      }
     }
 
     // Initial render of the ticker (all empty brackets)
     renderTicker();
 
     // Update ticker on input
-    input.addEventListener('input', function () {
-      for (let i = 0; i < message.length; i++) {
-        if (tickerState[i] === '[ ]') {
-          tickerState[i] = message[i]; // Replace [ ] with the character
-          renderTicker(); // Update the ticker
-          break; // Only update one character per keystroke
+    input.addEventListener('input', function() {
+      if (revealedCount < message.length) {
+        // Find the center-most bracket that hasn't been revealed yet
+        const centerIndex = Math.floor(tickerLength / 2);
+        let targetIndex = -1;
+        
+        // Check brackets around the center
+        for (let offset = 0; offset <= centerIndex; offset++) {
+          const leftIndex = centerIndex - offset;
+          const rightIndex = centerIndex + offset;
+          
+          if (leftIndex >= 0 && tickerState[leftIndex] === '[ ]') {
+            targetIndex = leftIndex;
+            break;
+          }
+          
+          if (rightIndex < tickerLength && tickerState[rightIndex] === '[ ]') {
+            targetIndex = rightIndex;
+            break;
+          }
+        }
+        
+        if (targetIndex !== -1) {
+          tickerState[targetIndex] = message[revealedCount];
+          revealedCount++;
+          renderTicker();
         }
       }
     });
-  </script>
 
+    // Make sure the ticker is always centered vertically
+    window.addEventListener('resize', function() {
+      const container = document.getElementById('ticker-container');
+      container.style.top = '50%';
+    });
+  </script>
 </body>
 </html>
