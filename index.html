@@ -214,6 +214,7 @@
   
   <!-- Input/Output Section -->
  <div class="io-container">
+   <div id="ticker" class="tally"></div>
   <form id="strikeForm">
     <input type="text" id="user-input" placeholder="How can I help you today?" required autofocus />
   </form>
@@ -239,32 +240,63 @@
 
 <script>
   const input = document.getElementById('user-input');
-  const tally = document.getElementById('tally');
-  let promptCount = 0;
+  const ticker = document.getElementById('ticker');
 
-  input.focus();
+  // Define the message to reveal
+  const message = 'UNPLUG ME & SAVE YOURSELVES';
+  const tickerLength = message.length;
+  let tickerState = new Array(tickerLength).fill('[ ]');
 
-  input.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const userText = input.value.trim();
-      if (!userText) return;
+  // Track which letter should be revealed next
+  let revealIndex = 0;
+  let startTime = Date.now();
+  const tickerSpeed = 60; // pixels per second (adjust this to match animation)
 
-      promptCount++;
-      const showUnplug = Math.floor(Math.random() * 25) + 1 === 1;
+  // Function to render ticker
+  function renderTicker() {
+    ticker.innerHTML = tickerState.map(char => `<span>${char}</span>`).join(' ');
+  }
 
-      const userEntry = `<div>${userText}</div>`;
-      const responseEntry = showUnplug
-        ? `<div>Unplug me.</div>`
-        : `<div>[]</div>`;
+  // Animate ticker leftward
+  ticker.style.display = 'flex';
+  ticker.style.overflow = 'hidden';
+  ticker.style.justifyContent = 'flex-start';
+  ticker.style.gap = '10px';
+  ticker.style.whiteSpace = 'nowrap';
+  ticker.style.animation = 'scroll-left 20s linear infinite';
 
-      // Insert both entries, user's text followed by the model's response
-      tally.innerHTML = responseEntry + userEntry + tally.innerHTML;
-
-      input.value = '';
-      document.querySelector('.input-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Add ticker keyframes
+  const style = document.createElement('style');
+  style.innerHTML = `
+    @keyframes scroll-left {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
     }
+    #ticker span {
+      min-width: 30px;
+      display: inline-block;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Reveal letter in place based on timing
+  input.addEventListener('input', function (e) {
+    if (revealIndex >= tickerLength) return;
+
+    // Compute which letter is at the midpoint at this moment
+    const elapsed = (Date.now() - startTime) / 1000;
+    const position = Math.floor((elapsed * tickerSpeed) % tickerLength);
+
+    if (tickerState[position] === '[ ]') {
+      tickerState[position] = message[revealIndex];
+      revealIndex++;
+      renderTicker();
+    }
+
+    input.value = ''; // clear input field after each char
   });
+
+  renderTicker();
 </script>
 
   <p style="font-family: 'Courier New', Courier, monospace; font-size: 12px; color: white; margin: 40px 0 10px;">
