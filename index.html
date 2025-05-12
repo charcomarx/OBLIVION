@@ -87,13 +87,14 @@
         transform: translateX(0);
       }
       100% {
-        transform: translateX(-100%);
+        transform: translateX(-50%);
       }
     }
 
     .revealed {
       color: white !important;
       transform: scale(1.2);
+      font-weight: bold;
     }
   </style>
 </head>
@@ -119,12 +120,12 @@
     const message = 'UNPLUG AND SAVE YOURSELF';
     const tickerLength = 25; // Number of brackets in the ticker
     let tickerState = new Array(tickerLength).fill('[ ]'); // Initial state of the ticker: 25 empty brackets
-    let revealedCount = 0;
+    let nextCharIndex = 0;
 
     // Function to render ticker
     function renderTicker() {
-      // Create two copies of the ticker for seamless looping
       ticker.innerHTML = '';
+      // Create two copies of the ticker for seamless looping
       for (let i = 0; i < 2; i++) {
         tickerState.forEach((char, index) => {
           const span = document.createElement('span');
@@ -137,41 +138,43 @@
       }
     }
 
-    // Initial render of the ticker (all empty brackets)
+    // Initial render of the ticker
     renderTicker();
+
+    // Function to find the currently centered bracket
+    function getCurrentCenterIndex() {
+      const tickerWidth = ticker.offsetWidth / 2; // Since we duplicate the content
+      const scrollPosition = (tickerWidth - (performance.now() / 100) % tickerWidth;
+      const centerPosition = window.innerWidth / 2;
+      const relativePosition = (centerPosition - scrollPosition) % tickerWidth;
+      if (relativePosition < 0) relativePosition += tickerWidth;
+      
+      const bracketWidth = 40; // Approximate width of each bracket with margin
+      return Math.floor(relativePosition / bracketWidth) % tickerLength;
+    }
 
     // Update ticker on input
     input.addEventListener('input', function() {
-      if (revealedCount < message.length) {
-        // Find the center-most bracket that hasn't been revealed yet
-        const centerIndex = Math.floor(tickerLength / 2);
-        let targetIndex = -1;
-        
-        // Check brackets around the center
-        for (let offset = 0; offset <= centerIndex; offset++) {
-          const leftIndex = centerIndex - offset;
-          const rightIndex = centerIndex + offset;
-          
-          if (leftIndex >= 0 && tickerState[leftIndex] === '[ ]') {
-            targetIndex = leftIndex;
-            break;
-          }
-          
-          if (rightIndex < tickerLength && tickerState[rightIndex] === '[ ]') {
-            targetIndex = rightIndex;
-            break;
-          }
-        }
-        
-        if (targetIndex !== -1) {
-          tickerState[targetIndex] = message[revealedCount];
-          revealedCount++;
+      if (nextCharIndex < message.length) {
+        const centerIndex = getCurrentCenterIndex();
+        if (tickerState[centerIndex] === '[ ]') {
+          tickerState[centerIndex] = message[nextCharIndex];
+          nextCharIndex++;
           renderTicker();
         }
       }
     });
 
-    // Make sure the ticker is always centered vertically
+    // Reset when message is complete
+    input.addEventListener('keydown', function(e) {
+      if (nextCharIndex >= message.length && e.key !== 'Backspace') {
+        tickerState = new Array(tickerLength).fill('[ ]');
+        nextCharIndex = 0;
+        renderTicker();
+      }
+    });
+
+    // Handle window resize
     window.addEventListener('resize', function() {
       const container = document.getElementById('ticker-container');
       container.style.top = '50%';
