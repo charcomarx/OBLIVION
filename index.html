@@ -196,15 +196,17 @@
       }
 
       initialize();
-
-      input.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          
-          if (isComplete) {
-            clearInterval(cascadeInterval);
-            return;
-          }
+      
+input.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    
+    // Just prevent new inputs from doing anything during cascade
+    if (isComplete) return; // Optional: Keep this to ignore inputs during cascade
+    
+    // ... rest of your input handling code ...
+  }
+});
           
           promptCount++;
           
