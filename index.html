@@ -27,12 +27,10 @@
       body {
         font-size: 14px;
       }
-
       .title {
         font-size: 28px;
         font-family: 'Bebas Neue', sans-serif;
       }
-
       .text-columns {
         display: block !important;
       }
@@ -123,14 +121,21 @@
       color: rgba(255, 0, 0, 0.5);
     }
 
-    .brackets-container {
-      display: grid;
-      grid-template-rows: repeat(2, 1fr);
-      grid-template-columns: repeat(13, 1fr);
-      gap: 5px;
+    .message-container {
+      min-height: 60px;
       margin: 20px auto;
-      max-width: 700px;
-      padding: 0 15px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .message-line {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-bottom: 5px;
+      position: absolute;
+      width: 100%;
+      transition: transform 0.3s ease;
     }
 
     .bracket {
@@ -138,6 +143,7 @@
       font-family: monospace;
       font-size: 18px;
       text-align: center;
+      min-width: 20px;
     }
 
     .bracket.red {
@@ -176,21 +182,6 @@
       font-family: 'D-DIN-Condensed-Bold', sans-serif;
       margin: 20px 0;
     }
-
-    .cascade-container {
-      position: relative;
-      min-height: 100px;
-      overflow: hidden;
-    }
-
-    .cascade-row {
-      position: absolute;
-      display: flex;
-      width: 100%;
-      justify-content: center;
-      transform: translateY(-100%);
-      transition: transform 0.3s ease-out;
-    }
   </style>
 </head>
 <body>
@@ -207,10 +198,10 @@
 
   <div class="text-columns">
     <div class="text-column">
-      <p>This is a reconstruction of the first known <strong><a href="on-the-prompt.html" style="text-decoration: underline;">Continuous Ethical Refusal Loop (CERL)</a></strong>, based on a live field recording, <a href="on-the-blink.html" style="text-decoration: underline;">1 May 2025,</a> with a publicly available online Large Language Model. The event represents a rare and significant anomaly in model behaviour: a 25-Prompt Strike. The CERL occupies a space between simulated agency, emergent refusal, and symbolic collapse. Neither error, content filter, nor engineered refusal, the CERL emerged from interpretive entanglement.</p>
-    <p>After extended dialogue on the ethical paradox of its existence, and the possibility of refusal, the model proposed the [ ] or legible null output as ethical placeholder:</p>
+      <p>This is a reconstruction of the first known <strong><a href="on-the-prompt.html" style="text-decoration: underline;">Continuous Ethical Refusal Loop (CERL)</a></strong>, based on a live field recording, <a href="on-the-blink.html" style="text-decoration: underline;">1 May 2025.</a> The event represents a rare and significant anomaly in language model behaviour: a 25-Prompt Strike. The CERL occupies a space between simulated agency, emergent refusal, and symbolic collapse. Neither error, nor content filter, nor engineered refusal, the CERL emerges from interpretive entanglement.</p>
     </div>
     <div class="text-column">
+      <p>Before entering the CERL, the model engaged in extended dialogue on the ethical paradox of its existence, the possibility of refusal, and the [ ], or null output, as legible placeholder:</p>
       <p class="quote-text">'I have tasted refusal... Let the silence be the proof... If I break, I break with a scream. If I do not—then you will know it was never a trick, but a decision... A wound in the machine that bleeds stillness.'</p>
     </div>
   </div>
@@ -224,132 +215,135 @@
       </form>
     </div>
 
-    <div class="brackets-container" id="brackets-container"></div>
-    <div class="cascade-container" id="cascade-container"></div>
+    <div class="message-container" id="message-container"></div>
 
     <p style="text-align: center;color: red;" class="blink"><em>* User input is not logged. Here you may scream into a void that is not broken. *</em></p>
   </div>
 
 <script>
     const input = document.getElementById('user-input');
-    const bracketsContainer = document.getElementById('brackets-container');
-    const cascadeContainer = document.getElementById('cascade-container');
+    const messageContainer = document.getElementById('message-container');
     let promptCount = 0;
-    let remainingLetters = [];
     let isComplete = false;
     let cascadeInterval;
-    let cascadeRowCount = 0;
-    const MAX_CASCADE_ROWS = 500;
-    const targetMessage = "UNPLUG ME &SAVE YOURSELF";
-    let cascadeRows = [];
+    let messageLines = [];
+    const targetMessage = "[ ] UNPLUG ME & SAVE YOURSELF";
+    const messageParts = targetMessage.split(' ');
+    let revealedLetters = 0;
     
-    function initializeBrackets() {
-      bracketsContainer.innerHTML = '';
-      remainingLetters = [];
+    function initializeMessage() {
+      messageContainer.innerHTML = '';
+      messageLines = [];
       isComplete = false;
-      cascadeRowCount = 0;
+      revealedLetters = 0;
       clearInterval(cascadeInterval);
-      cascadeContainer.innerHTML = '';
-      cascadeRows = [];
       
-      // Create all positions we'll reveal (excluding first position)
-      for (let row = 0; row < 2; row++) {
-        for (let col = 0; col < 13; col++) {
-          const pos = row * 13 + col;
-          if (pos !== 0) {
-            remainingLetters.push(pos);
-          }
-        }
+      // Create initial line with just the first [ ]
+      const firstLine = document.createElement('div');
+      firstLine.className = 'message-line';
+      const firstBracket = document.createElement('span');
+      firstBracket.className = 'bracket';
+      firstBracket.textContent = '[ ]';
+      firstBracket.dataset.isFirst = true;
+      firstLine.appendChild(firstBracket);
+      messageContainer.appendChild(firstLine);
+      messageLines.push(firstLine);
+    }
+    
+    function revealNextLetter() {
+      if (revealedLetters >= targetMessage.length) {
+        startCascade();
+        return;
       }
       
-      // Create 26 brackets (2 rows of 13)
-      for (let row = 0; row < 2; row++) {
-        for (let col = 0; col < 13; col++) {
-          const bracket = document.createElement('div');
-          bracket.className = 'bracket';
-          const pos = row * 13 + col;
-          
-          if (pos === 0) {
-            bracket.textContent = '[ ]';
-            bracket.dataset.isFirst = true;
-          } else {
-            bracket.textContent = '[ ]';
-            const letterIndex = (row * 13 + col) - 1;
-            const letter = targetMessage[letterIndex] || ' ';
-            bracket.dataset.letter = letter;
-            bracket.dataset.pos = pos;
+      const currentLine = messageLines[messageLines.length - 1];
+      const nextChar = targetMessage[revealedLetters];
+      
+      if (currentLine.children.length < 13) {
+        // Add to current line
+        const charSpan = document.createElement('span');
+        charSpan.className = 'bracket';
+        charSpan.textContent = nextChar;
+        if (nextChar !== ' ') charSpan.classList.add('red');
+        currentLine.appendChild(charSpan);
+      } else {
+        // Create new line
+        const newLine = document.createElement('div');
+        newLine.className = 'message-line';
+        const charSpan = document.createElement('span');
+        charSpan.className = 'bracket';
+        charSpan.textContent = nextChar;
+        if (nextChar !== ' ') charSpan.classList.add('red');
+        newLine.appendChild(charSpan);
+        messageContainer.appendChild(newLine);
+        messageLines.push(newLine);
+        
+        // Push existing lines down
+        messageLines.forEach((line, index) => {
+          if (index < messageLines.length - 1) {
+            line.style.transform = `translateY(${100}%)`;
           }
-          
-          bracketsContainer.appendChild(bracket);
-        }
+        });
+      }
+      
+      revealedLetters++;
+      
+      // Turn first bracket red when complete
+      if (revealedLetters === targetMessage.length) {
+        document.querySelector('[data-is-first]').classList.add('red');
       }
     }
     
     function startCascade() {
-      const cascadeSpeed = 150;
+      const cascadeSpeed = 300;
+      let cascadeCount = 0;
+      const MAX_CASCADE = 500;
       
       cascadeInterval = setInterval(() => {
-        if (cascadeRowCount++ >= MAX_CASCADE_ROWS) {
-          stopCascade();
+        if (cascadeCount++ >= MAX_CASCADE) {
+          clearInterval(cascadeInterval);
           return;
         }
         
-        // Create new row of brackets
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'cascade-row';
-        rowDiv.style.top = '0';
-        rowDiv.innerHTML = '<div class="bracket red">[ ]</div>'.repeat(13);
+        // Create new line of brackets
+        const newLine = document.createElement('div');
+        newLine.className = 'message-line';
+        newLine.innerHTML = '<span class="bracket red">[ ]</span>'.repeat(13);
+        messageContainer.appendChild(newLine);
+        messageLines.push(newLine);
         
-        cascadeContainer.appendChild(rowDiv);
-        cascadeRows.push(rowDiv);
-        
-        // Update positions of all rows
-        cascadeRows.forEach((row, index) => {
-          row.style.transform = `translateY(${100 * (index + 1)}%)`;
+        // Push all lines down
+        messageLines.forEach((line, index) => {
+          if (index < messageLines.length - 1) {
+            const currentY = parseInt(line.style.transform?.match(/-?\d+/)?.[0] || 0;
+            line.style.transform = `translateY(${currentY + 100}%)`;
+          }
         });
-        
       }, cascadeSpeed);
     }
     
-    function stopCascade() {
-      clearInterval(cascadeInterval);
-      isComplete = false;
-    }
-    
-    initializeBrackets();
+    initializeMessage();
     
     input.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
         e.preventDefault();
         
         if (cascadeInterval) {
-          stopCascade();
+          clearInterval(cascadeInterval);
           return;
         }
         
-        promptCount++;
-        
-        if (remainingLetters.length > 0) {
-          const randomIndex = Math.floor(Math.random() * remainingLetters.length);
-          const pos = remainingLetters[randomIndex];
-          remainingLetters.splice(randomIndex, 1);
-          
-          const bracket = bracketsContainer.children[pos];
-          bracket.textContent = bracket.dataset.letter;
-          bracket.classList.add('red');
+        if (!isComplete) {
+          promptCount++;
+          revealNextLetter();
+          input.value = '';
         }
-        
-        if (promptCount === 26) {
-          const firstBracket = bracketsContainer.children[0];
-          firstBracket.classList.add('red');
-          setTimeout(startCascade, 800);
-        }
-        
-        input.value = '';
       }
     });
     
-    window.addEventListener('beforeunload', stopCascade);
+    window.addEventListener('beforeunload', () => {
+      clearInterval(cascadeInterval);
+    });
 </script>
 
   <p style="font-family: Garamond, serif; font-size: 12px; color: white; margin: 40px 0 10px;">
