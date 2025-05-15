@@ -1,3 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>OBLIVION</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    /* [Previous CSS remains exactly the same until .message-container] */
+    
+    .message-container {
+      min-height: 60px;
+      margin: 20px auto;
+      position: relative;
+      overflow: visible;
+      max-width: 700px;
+    }
+    
+    .message-scroll {
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+    
+    .message-line {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-bottom: 5px;
+    }
+    
+    .bracket {
+      color: white;
+      font-family: monospace;
+      font-size: 18px;
+      text-align: center;
+      min-width: 20px;
+    }
+    
+    .bracket.red {
+      color: red;
+    }
+    
+    /* [Rest of CSS remains exactly the same] */
+  </style>
+</head>
+<body>
+  <!-- [All HTML remains the same until the script] -->
 <script>
     const input = document.getElementById('user-input');
     const bracketsContainer = document.getElementById('brackets-container');
@@ -99,3 +146,7 @@
       }
     });
 </script>
+
+  <!-- [Rest of HTML remains the same] -->
+</body>
+</html>
