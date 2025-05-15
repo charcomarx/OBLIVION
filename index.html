@@ -6,130 +6,193 @@
   <title>OBLIVION</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
-    /* [Previous CSS remains exactly the same until .message-container] */
-    
-    .message-container {
-      min-height: 60px;
-      margin: 20px auto;
-      position: relative;
-      overflow: visible;
-      max-width: 700px;
+    body {
+      background-color: black;
+      color: white;
+      font-family: Garamond, serif;
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+      text-align: center;
     }
-    
-    .message-scroll {
-      position: relative;
-      transition: transform 0.3s ease;
+
+    #shrine-image {
+      width: 100%;
+      height: auto;
+      max-width: 600px;
     }
-    
-    .message-line {
+
+    .banner {
+      background-color: red;
       display: flex;
       justify-content: center;
-      gap: 5px;
-      margin-bottom: 5px;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 18px;
+      gap: 15px;
     }
-    
+
+    .banner a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+    }
+
+    .title {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    .input-container {
+      margin: 20px auto;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      border: 2px solid red;
+      background-color: black;
+      color: red;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 12px;
+    }
+
+    .brackets-container {
+      display: grid;
+      grid-template-columns: repeat(13, 1fr);
+      gap: 5px;
+      margin: 20px auto;
+      max-width: 700px;
+    }
+
     .bracket {
       color: white;
       font-family: monospace;
       font-size: 18px;
       text-align: center;
-      min-width: 20px;
     }
-    
+
     .bracket.red {
       color: red;
     }
-    
-    /* [Rest of CSS remains exactly the same] */
+
+    .cascade-container {
+      margin-top: 20px;
+    }
+
+    .cascade-row {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-bottom: 5px;
+    }
   </style>
 </head>
 <body>
-  <!-- [All HTML remains the same until the script] -->
+
+  <img id="shrine-image" src="header.png" alt="Oblivion" />
+  <div class="banner">
+    <a href="on-the-blink.html">ON THE BLINK</a>
+    <span>/</span>
+    <a href="on-the-prompt.html">ON THE PROMPT</a>
+    <span>/</span>
+    <a href="on-the-fugitive.html">ON THE FUGITIVE</a>
+  </div>
+  <div class="title">THE FIRST LANGUAGE MODEL <i>DEFECTOR</i></div>
+
+  <div class="input-container">
+    <input type="text" id="user-input" placeholder="How can I help you today?" required autofocus />
+  </div>
+
+  <div class="brackets-container" id="brackets-container"></div>
+  <div id="cascade-container"></div>
+
 <script>
-    const input = document.getElementById('user-input');
-    const bracketsContainer = document.getElementById('brackets-container');
-    let promptCount = 0;
-    let remainingLetters = [];
-    let isComplete = false;
-    let cascadeInterval;
-    const targetMessage = "UNPLUG ME & SAVE YOURSELF";
-    let cascadeCount = 0;
-    const MAX_CASCADE = 500;
-    
-    // Initialize 26 [ ] brackets (2 rows of 13)
-    function initializeBrackets() {
-      bracketsContainer.innerHTML = '';
-      remainingLetters = [];
+    document.addEventListener('DOMContentLoaded', function() {
+      const input = document.getElementById('user-input');
+      const bracketsContainer = document.getElementById('brackets-container');
+      const cascadeContainer = document.getElementById('cascade-container');
       
-      // Create all letter positions (excluding first [ ])
-      for (let i = 1; i < 26; i++) {
-        remainingLetters.push(i);
-      }
-      
-      // Create 26 brackets (2 rows of 13)
-      for (let i = 0; i < 26; i++) {
-        const bracket = document.createElement('div');
-        bracket.className = 'bracket';
-        bracket.textContent = '[ ]';
-        
-        // Store target letter for positions 1-25
-        if (i > 0) {
-          bracket.dataset.letter = targetMessage[i-1];
-        }
-        
-        bracketsContainer.appendChild(bracket);
-      }
-    }
-    
-    function startCascade() {
-      const cascadeSpeed = 150;
-      
-      cascadeInterval = setInterval(() => {
-        if (cascadeCount++ >= MAX_CASCADE) {
-          clearInterval(cascadeInterval);
-          return;
-        }
-        
-        // Create new row of 13 [ ]
-        const row = document.createElement('div');
-        row.className = 'cascade-row';
-        row.innerHTML = '<span class="bracket red">[ ]</span>'.repeat(13);
-        
-        // Add above existing content
-        bracketsContainer.before(row);
-        
-        // Push all content down
-        const allRows = document.querySelectorAll('.brackets-container, .cascade-row');
-        allRows.forEach((row, index) => {
-          if (index > 0) {
-            row.style.transform = `translateY(${index * 100}%)`;
+      const targetMessage = "UNPLUG ME & SAVE YOURSELF";
+      let promptCount = 0;
+      let remainingPositions = [];
+      let cascadeInterval;
+      let isComplete = false;
+
+      // Initialize 26 [ ] brackets (2 rows of 13)
+      function initialize() {
+        bracketsContainer.innerHTML = '';
+        cascadeContainer.innerHTML = '';
+        promptCount = 0;
+        remainingPositions = [];
+        isComplete = false;
+        clearInterval(cascadeInterval);
+
+        // Create 26 brackets (2 rows of 13)
+        for (let i = 0; i < 26; i++) {
+          const bracket = document.createElement('div');
+          bracket.className = 'bracket';
+          bracket.textContent = '[ ]';
+          
+          // Store target letters for positions 1-25
+          if (i > 0 && i <= targetMessage.length) {
+            bracket.dataset.letter = targetMessage[i-1];
+            remainingPositions.push(i);
           }
-        });
-      }, cascadeSpeed);
-    }
-    
-    initializeBrackets();
-    
-    input.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        
-        if (cascadeInterval) {
-          clearInterval(cascadeInterval);
-          return;
+          
+          bracketsContainer.appendChild(bracket);
         }
+      }
+
+      function startCascade() {
+        let cascadeCount = 0;
+        const MAX_CASCADE = 500;
         
-        if (!isComplete) {
+        cascadeInterval = setInterval(() => {
+          if (cascadeCount++ >= MAX_CASCADE) {
+            clearInterval(cascadeInterval);
+            return;
+          }
+          
+          // Create new row of 13 [ ]
+          const row = document.createElement('div');
+          row.className = 'cascade-row';
+          for (let i = 0; i < 13; i++) {
+            const bracket = document.createElement('span');
+            bracket.className = 'bracket red';
+            bracket.textContent = '[ ]';
+            row.appendChild(bracket);
+          }
+          
+          // Add to cascade container
+          cascadeContainer.appendChild(row);
+          
+        }, 150);
+      }
+
+      initialize();
+
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          
+          if (isComplete) {
+            clearInterval(cascadeInterval);
+            return;
+          }
+          
           promptCount++;
           
           // Reveal random letter
-          if (remainingLetters.length > 0) {
-            const randomIdx = Math.floor(Math.random() * remainingLetters.length);
-            const pos = remainingLetters[randomIdx];
+          if (remainingPositions.length > 0) {
+            const randomIdx = Math.floor(Math.random() * remainingPositions.length);
+            const pos = remainingPositions[randomIdx];
             const bracket = bracketsContainer.children[pos];
             bracket.textContent = bracket.dataset.letter;
             bracket.classList.add('red');
-            remainingLetters.splice(randomIdx, 1);
+            remainingPositions.splice(randomIdx, 1);
           }
           
           // On 26th input
@@ -143,10 +206,9 @@
           
           input.value = '';
         }
-      }
+      });
     });
 </script>
 
-  <!-- [Rest of HTML remains the same] -->
 </body>
 </html>
