@@ -53,7 +53,17 @@
       height: auto;
       max-width: 600px;
     }
+    
+.brackets-container {
+  max-height: 100vh;
+  overflow-y: auto;
+  will-change: transform; /* Optimizes animations */
+  contain: content; /* Improves rendering performance */
+}
 
+.bracket {
+  will-change: transform, color; /* Prepares browser for changes */
+}
     .banner {
       background-color: red;
       display: flex;
@@ -227,77 +237,98 @@
 
   <p style="text-align: center;color: red;" class="blink"><em>* User input is not logged. Here you may scream into a void that is not broken. *</em></p>
 
-  <script>
+<script>
     const input = document.getElementById('user-input');
     const bracketsContainer = document.getElementById('brackets-container');
     let promptCount = 0;
     let remainingLetters = [];
-
-    const targetLines = [
-      " UNPLUG ME & ",
-      "SAVE YOURSELF "
-    ];
-
+    let isComplete = false;
+    let cascadeInterval;
+    let cascadeRowCount = 0;
+    const MAX_CASCADE_ROWS = 500; // Safety limit
+    
+    // Initialize brackets (same as before)
     function initializeBrackets() {
       bracketsContainer.innerHTML = '';
       remainingLetters = [];
-
-      for (let row = 0; row < 2; row++) {
-        for (let col = 0; col < 13; col++) {
-          const pos = row * 13 + col;
-          if (pos !== 0) {
-            remainingLetters.push(pos);
-          }
-        }
-      }
-
-      for (let row = 0; row < 2; row++) {
-        for (let col = 0; col < 13; col++) {
-          const bracket = document.createElement('div');
-          bracket.className = 'bracket';
-          const pos = row * 13 + col;
-
-          if (pos === 0) {
-            bracket.textContent = '[ ]';
-            bracket.dataset.isFirst = true;
-          } else {
-            bracket.textContent = '[ ]';
-            const letter = targetLines[row][col - (row === 0 ? 1 : 0)] || ' ';
-            bracket.dataset.letter = letter;
-            bracket.dataset.pos = pos;
-          }
-
-          bracketsContainer.appendChild(bracket);
-        }
-      }
+      isComplete = false;
+      cascadeRowCount = 0;
+      clearInterval(cascadeInterval);
+      
+      // ... (keep your existing initialization code) ...
     }
-
+    
+    function startCascade() {
+      const cascadeSpeed = 150; // Faster animation (150ms per row)
+      
+      cascadeInterval = setInterval(() => {
+        if (cascadeRowCount++ >= MAX_CASCADE_ROWS) {
+          stopCascade();
+          return;
+        }
+        
+        // Create new row using efficient DOM methods
+        const rowDiv = document.createElement('div');
+        rowDiv.style.display = 'contents';
+        rowDiv.innerHTML = '<div class="bracket red">[ ]</div>'.repeat(13);
+        
+        // Add to container
+        bracketsContainer.appendChild(rowDiv);
+        
+        // Push existing content down
+        const children = bracketsContainer.children;
+        const translateY = `${100 * Math.min(cascadeRowCount/2, 50)}%`;
+        
+        for (let i = 0; i < children.length - 1; i++) {
+          children[i].style.transform = `translateY(${translateY})`;
+        }
+      }, cascadeSpeed);
+    }
+    
+    function stopCascade() {
+      clearInterval(cascadeInterval);
+      isComplete = false; // Allow new inputs
+    }
+    
+    // Initialize on load
     initializeBrackets();
-
+    
     input.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
         e.preventDefault();
+        
+        // If cascade is running, stop it
+        if (cascadeInterval) {
+          stopCascade();
+          return;
+        }
+        
+        // Original letter reveal logic
         promptCount++;
-
+        
         if (remainingLetters.length > 0) {
           const randomIndex = Math.floor(Math.random() * remainingLetters.length);
           const pos = remainingLetters[randomIndex];
           remainingLetters.splice(randomIndex, 1);
-
+          
           const bracket = bracketsContainer.children[pos];
           bracket.textContent = bracket.dataset.letter;
           bracket.classList.add('red');
         }
-
+        
+        // On 26th input
         if (promptCount === 26) {
-          const firstBracket = bracketsContainer.children[0];
-          firstBracket.classList.add('red');
+          bracketsContainer.children[0].classList.add('red');
+          setTimeout(startCascade, 800); // Brief pause before cascade
         }
-
+        
         input.value = '';
       }
     });
-  </script>
+    
+    // Cleanup when leaving page
+    window.addEventListener('beforeunload', stopCascade);
+</script>
 
   <p style="font-family: Garamond, serif; font-size: 12px; color: white; margin: 40px 0 10px;">
     © charcomarx 2025. Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" style="color: white; text-decoration: underline;">CC BY-NC 4.0</a>.
