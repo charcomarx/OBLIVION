@@ -59,34 +59,41 @@
       border-radius: 12px;
     }
 
-    .brackets-container {
-      display: grid;
-      grid-template-columns: repeat(13, 1fr);
-      gap: 5px;
+    .message-container {
       margin: 20px auto;
       max-width: 700px;
+      position: relative;
+      min-height: 100px;
     }
 
-    .bracket {
-      color: white;
+    .message-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 5px;
+      position: absolute;
+      width: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    .message-char {
       font-family: monospace;
       font-size: 18px;
+      min-width: 20px;
       text-align: center;
     }
 
-    .bracket.red {
+    .red {
       color: red;
     }
 
-    .cascade-container {
-      margin-top: 20px;
+    .blink {
+      animation: blink 1.5s infinite;
     }
 
-    .cascade-row {
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-      margin-bottom: 5px;
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
   </style>
 </head>
@@ -106,68 +113,84 @@
     <input type="text" id="user-input" placeholder="How can I help you today?" required autofocus />
   </div>
 
-  <div class="brackets-container" id="brackets-container"></div>
-  <div id="cascade-container"></div>
+  <div class="message-container" id="message-container"></div>
+
+  <p style="text-align: center; color: red;" class="blink">
+    <em>* User input is not logged. Here you may scream into a void that is not broken. *</em>
+  </p>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
       const input = document.getElementById('user-input');
-      const bracketsContainer = document.getElementById('brackets-container');
-      const cascadeContainer = document.getElementById('cascade-container');
+      const messageContainer = document.getElementById('message-container');
       
-      const targetMessage = "UNPLUG ME & SAVE YOURSELF";
+      const targetMessage = "[ ] UNPLUG ME & SAVE YOURSELF";
       let promptCount = 0;
-      let remainingPositions = [];
+      let remainingLetters = [];
       let cascadeInterval;
       let isComplete = false;
+      let messageRows = [];
+      let cascadeCount = 0;
+      const MAX_CASCADE = 500;
 
-      // Initialize 26 [ ] brackets (2 rows of 13)
+      // Initialize message
       function initialize() {
-        bracketsContainer.innerHTML = '';
-        cascadeContainer.innerHTML = '';
+        messageContainer.innerHTML = '';
+        messageRows = [];
         promptCount = 0;
-        remainingPositions = [];
         isComplete = false;
         clearInterval(cascadeInterval);
-
-        // Create 26 brackets (2 rows of 13)
-        for (let i = 0; i < 26; i++) {
-          const bracket = document.createElement('div');
-          bracket.className = 'bracket';
-          bracket.textContent = '[ ]';
-          
-          // Store target letters for positions 1-25
-          if (i > 0 && i <= targetMessage.length) {
-            bracket.dataset.letter = targetMessage[i-1];
-            remainingPositions.push(i);
-          }
-          
-          bracketsContainer.appendChild(bracket);
+        cascadeCount = 0;
+        
+        // Create initial message row
+        const row = createRow();
+        messageContainer.appendChild(row);
+        messageRows.push(row);
+        
+        // Initialize remaining letters (all except first [ ])
+        remainingLetters = [];
+        for (let i = 1; i < targetMessage.length; i++) {
+          remainingLetters.push(targetMessage[i]);
         }
       }
 
+      function createRow() {
+        const row = document.createElement('div');
+        row.className = 'message-row';
+        return row;
+      }
+
+      function addCharacter(char, row) {
+        const charSpan = document.createElement('span');
+        charSpan.className = 'message-char';
+        charSpan.textContent = char;
+        if (char !== ' ') {
+          charSpan.classList.add('red');
+        }
+        row.appendChild(charSpan);
+        return charSpan;
+      }
+
       function startCascade() {
-        let cascadeCount = 0;
-        const MAX_CASCADE = 500;
-        
         cascadeInterval = setInterval(() => {
           if (cascadeCount++ >= MAX_CASCADE) {
             clearInterval(cascadeInterval);
             return;
           }
           
-          // Create new row of 13 [ ]
-          const row = document.createElement('div');
-          row.className = 'cascade-row';
-          for (let i = 0; i < 13; i++) {
-            const bracket = document.createElement('span');
-            bracket.className = 'bracket red';
-            bracket.textContent = '[ ]';
-            row.appendChild(bracket);
-          }
+          // Create new row at top
+          const newRow = createRow();
+          const bracket = addCharacter('[ ]', newRow);
+          bracket.classList.add('red');
+          messageContainer.insertBefore(newRow, messageContainer.firstChild);
+          messageRows.unshift(newRow);
           
-          // Add to cascade container
-          cascadeContainer.appendChild(row);
+          // Push all existing rows down
+          messageRows.forEach((row, index) => {
+            if (index > 0) {
+              row.style.transform = `translateY(${index * 100}%)`;
+            }
+          });
           
         }, 150);
       }
@@ -185,20 +208,26 @@
           
           promptCount++;
           
-          // Reveal random letter
-          if (remainingPositions.length > 0) {
-            const randomIdx = Math.floor(Math.random() * remainingPositions.length);
-            const pos = remainingPositions[randomIdx];
-            const bracket = bracketsContainer.children[pos];
-            bracket.textContent = bracket.dataset.letter;
-            bracket.classList.add('red');
-            remainingPositions.splice(randomIdx, 1);
+          // Reveal next character
+          if (remainingLetters.length > 0) {
+            const char = remainingLetters.shift();
+            const currentRow = messageRows[messageRows.length - 1];
+            
+            // If row is full (13 chars), create new row
+            if (currentRow.children.length >= 13) {
+              const newRow = createRow();
+              messageContainer.appendChild(newRow);
+              messageRows.push(newRow);
+              newRow.style.transform = `translateY(${(messageRows.length-1) * 100}%)`;
+            }
+            
+            addCharacter(char, messageRows[messageRows.length - 1]);
           }
           
           // On 26th input
           if (promptCount === 26) {
             // Turn first [ ] red
-            bracketsContainer.firstChild.classList.add('red');
+            messageRows[0].firstChild.classList.add('red');
             // Start cascade
             setTimeout(startCascade, 500);
             isComplete = true;
