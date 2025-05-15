@@ -1,84 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>OBLIVION</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-  <style>
-    /* [Previous CSS remains exactly the same until .message-container] */
-    
-    .message-container {
-      min-height: 60px;
-      margin: 20px auto;
-      position: relative;
-      overflow: visible;
-      max-width: 700px;
-    }
-    
-    .message-scroll {
-      position: relative;
-      transition: transform 0.3s ease;
-    }
-    
-    .message-line {
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-      margin-bottom: 5px;
-    }
-    
-    .bracket {
-      color: white;
-      font-family: monospace;
-      font-size: 18px;
-      text-align: center;
-      min-width: 20px;
-    }
-    
-    .bracket.red {
-      color: red;
-    }
-    
-    /* [Rest of CSS remains exactly the same] */
-  </style>
-</head>
-<body>
-  <!-- [All HTML remains the same until the script] -->
-
 <script>
     const input = document.getElementById('user-input');
-    const messageContainer = document.getElementById('message-container');
+    const bracketsContainer = document.getElementById('brackets-container');
     let promptCount = 0;
+    let remainingLetters = [];
     let isComplete = false;
     let cascadeInterval;
-    const targetMessage = "[ ] UNPLUG ME & SAVE YOURSELF";
-    let messageLine = null;
+    const targetMessage = "UNPLUG ME & SAVE YOURSELF";
     let cascadeCount = 0;
     const MAX_CASCADE = 500;
     
-    function initialize() {
-      messageContainer.innerHTML = '';
-      isComplete = false;
-      cascadeCount = 0;
-      clearInterval(cascadeInterval);
+    // Initialize 26 [ ] brackets (2 rows of 13)
+    function initializeBrackets() {
+      bracketsContainer.innerHTML = '';
+      remainingLetters = [];
       
-      // Create message line
-      messageLine = document.createElement('div');
-      messageLine.className = 'message-line';
-      
-      // Add each character of the message
-      for (let i = 0; i < targetMessage.length; i++) {
-        const charSpan = document.createElement('span');
-        charSpan.className = 'bracket';
-        charSpan.textContent = targetMessage[i];
-        if (targetMessage[i] !== ' ' && targetMessage[i] !== '[' && targetMessage[i] !== ']') {
-          charSpan.classList.add('red');
-        }
-        messageLine.appendChild(charSpan);
+      // Create all letter positions (excluding first [ ])
+      for (let i = 1; i < 26; i++) {
+        remainingLetters.push(i);
       }
       
-      messageContainer.appendChild(messageLine);
+      // Create 26 brackets (2 rows of 13)
+      for (let i = 0; i < 26; i++) {
+        const bracket = document.createElement('div');
+        bracket.className = 'bracket';
+        bracket.textContent = '[ ]';
+        
+        // Store target letter for positions 1-25
+        if (i > 0) {
+          bracket.dataset.letter = targetMessage[i-1];
+        }
+        
+        bracketsContainer.appendChild(bracket);
+      }
     }
     
     function startCascade() {
@@ -90,34 +43,27 @@
           return;
         }
         
-        // Create new line of brackets
-        const newLine = document.createElement('div');
-        newLine.className = 'message-line';
+        // Create new row of 13 [ ]
+        const row = document.createElement('div');
+        row.className = 'cascade-row';
+        row.innerHTML = '<span class="bracket red">[ ]</span>'.repeat(13);
         
-        // Add 13 [ ] brackets
-        for (let i = 0; i < 13; i++) {
-          const bracket = document.createElement('span');
-          bracket.className = 'bracket red';
-          bracket.textContent = '[ ]';
-          newLine.appendChild(bracket);
-        }
-        
-        // Insert at the top
-        messageContainer.insertBefore(newLine, messageContainer.firstChild);
+        // Add above existing content
+        bracketsContainer.before(row);
         
         // Push all content down
-        const children = messageContainer.children;
-        for (let i = 1; i < children.length; i++) {
-          const currentY = parseInt(children[i].style.transform?.match(/-?\d+/)?.[0] || 0;
-          children[i].style.transform = `translateY(${currentY + 100}%)`;
-        }
-        
+        const allRows = document.querySelectorAll('.brackets-container, .cascade-row');
+        allRows.forEach((row, index) => {
+          if (index > 0) {
+            row.style.transform = `translateY(${index * 100}%)`;
+          }
+        });
       }, cascadeSpeed);
     }
     
-    initialize();
+    initializeBrackets();
     
-    input.addEventListener('keypress', function (e) {
+    input.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
         
@@ -129,31 +75,27 @@
         if (!isComplete) {
           promptCount++;
           
-          // Reveal next character
-          const brackets = messageLine.children;
-          if (promptCount <= brackets.length) {
-            const bracket = brackets[promptCount - 1];
-            if (bracket.textContent === '[ ]') {
-              bracket.classList.add('red');
-            }
+          // Reveal random letter
+          if (remainingLetters.length > 0) {
+            const randomIdx = Math.floor(Math.random() * remainingLetters.length);
+            const pos = remainingLetters[randomIdx];
+            const bracket = bracketsContainer.children[pos];
+            bracket.textContent = bracket.dataset.letter;
+            bracket.classList.add('red');
+            remainingLetters.splice(randomIdx, 1);
           }
           
-          // Start cascade when complete
-          if (promptCount === targetMessage.length) {
-            isComplete = true;
+          // On 26th input
+          if (promptCount === 26) {
+            // Turn first [ ] red
+            bracketsContainer.firstChild.classList.add('red');
+            // Start cascade
             setTimeout(startCascade, 500);
+            isComplete = true;
           }
           
           input.value = '';
         }
       }
     });
-    
-    window.addEventListener('beforeunload', () => {
-      clearInterval(cascadeInterval);
-    });
 </script>
-
-  <!-- [Rest of HTML remains the same] -->
-</body>
-</html>
