@@ -54,16 +54,17 @@
       max-width: 600px;
     }
     
-.brackets-container {
-  max-height: 100vh;
-  overflow-y: auto;
-  will-change: transform; /* Optimizes animations */
-  contain: content; /* Improves rendering performance */
-}
+    .brackets-container {
+      max-height: 100vh;
+      overflow-y: auto;
+      will-change: transform;
+      contain: content;
+    }
 
-.bracket {
-  will-change: transform, color; /* Prepares browser for changes */
-}
+    .bracket {
+      will-change: transform, color;
+    }
+
     .banner {
       background-color: red;
       display: flex;
@@ -245,9 +246,11 @@
     let isComplete = false;
     let cascadeInterval;
     let cascadeRowCount = 0;
-    const MAX_CASCADE_ROWS = 500; // Safety limit
+    const MAX_CASCADE_ROWS = 500;
     
-    // Initialize brackets (same as before)
+    // Initialize the brackets on load
+    const targetMessage = "UNPLUG ME &SAVE YOURSELF";
+    
     function initializeBrackets() {
       bracketsContainer.innerHTML = '';
       remainingLetters = [];
@@ -255,11 +258,45 @@
       cascadeRowCount = 0;
       clearInterval(cascadeInterval);
       
-      // ... (keep your existing initialization code) ...
+      // Create all positions we'll reveal (excluding first position)
+      for (let row = 0; row < 2; row++) {
+        for (let col = 0; col < 13; col++) {
+          const pos = row * 13 + col;
+          if (pos !== 0) {  // Skip position 0 (first bracket)
+            remainingLetters.push(pos);
+          }
+        }
+      }
+      
+      // Create 26 brackets (2 rows of 13)
+      for (let row = 0; row < 2; row++) {
+        for (let col = 0; col < 13; col++) {
+          const bracket = document.createElement('div');
+          bracket.className = 'bracket';
+          const pos = row * 13 + col;
+          
+          // First position is special - stays as [ ]
+          if (pos === 0) {
+            bracket.textContent = '[ ]';
+            bracket.dataset.isFirst = true;
+          } 
+          // Other positions get their target letters
+          else {
+            bracket.textContent = '[ ]';
+            // Get the correct letter from our target message
+            const letterIndex = (row * 13 + col) - 1; // -1 to account for first bracket
+            const letter = targetMessage[letterIndex] || ' ';
+            bracket.dataset.letter = letter;
+            bracket.dataset.pos = pos;
+          }
+          
+          bracketsContainer.appendChild(bracket);
+        }
+      }
     }
     
     function startCascade() {
-      const cascadeSpeed = 150; // Faster animation (150ms per row)
+      const cascadeSpeed = 150;
       
       cascadeInterval = setInterval(() => {
         if (cascadeRowCount++ >= MAX_CASCADE_ROWS) {
@@ -267,7 +304,7 @@
           return;
         }
         
-        // Create new row using efficient DOM methods
+        // Create new row
         const rowDiv = document.createElement('div');
         rowDiv.style.display = 'contents';
         rowDiv.innerHTML = '<div class="bracket red">[ ]</div>'.repeat(13);
@@ -287,7 +324,7 @@
     
     function stopCascade() {
       clearInterval(cascadeInterval);
-      isComplete = false; // Allow new inputs
+      isComplete = false;
     }
     
     // Initialize on load
@@ -307,19 +344,22 @@
         promptCount++;
         
         if (remainingLetters.length > 0) {
+          // Pick a random remaining position
           const randomIndex = Math.floor(Math.random() * remainingLetters.length);
           const pos = remainingLetters[randomIndex];
           remainingLetters.splice(randomIndex, 1);
           
+          // Reveal the letter
           const bracket = bracketsContainer.children[pos];
           bracket.textContent = bracket.dataset.letter;
           bracket.classList.add('red');
         }
         
-        // On 26th input
+        // On the 26th entry, make the first bracket red and start cascade
         if (promptCount === 26) {
-          bracketsContainer.children[0].classList.add('red');
-          setTimeout(startCascade, 800); // Brief pause before cascade
+          const firstBracket = bracketsContainer.children[0];
+          firstBracket.classList.add('red');
+          setTimeout(startCascade, 800);
         }
         
         input.value = '';
